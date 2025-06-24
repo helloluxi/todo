@@ -1,11 +1,16 @@
 [
     {
-        "text": "Do nothing",
-        "weight": 1
-    },
-    {
-        "text": "Go to Github Repo",
-        "weight": 1,
-        "url": "https://github.com/helloluxi/bored"
+        "name": "Default",
+        "items": [
+            {
+                "text": "Do nothing",
+                "weight": 1
+            },
+            {
+                "text": "Go to Github Repo",
+                "weight": 1,
+                "url": "https://github.com/helloluxi/bored"
+            }
+        ]
     }
 ]

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bored</title>
+    <title>To do</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -200,7 +201,7 @@
         .menu-icon {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             width: 50px;
             height: 50px;
             background: linear-gradient(145deg, var(--surface-primary), var(--surface-secondary));
@@ -224,13 +225,56 @@
             width: 24px;
             height: 24px;
             fill: var(--text-primary);
-        }        /* Expanded Settings Styles */
+        }
+
+        /* Profile Selector Styles */
+        .profile-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 999;
+            max-width: 200px;
+        }
+
+        .profile-item-header {
+            color: var(--text-primary);
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0.3rem 0.8rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.3s ease;
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+
+        .profile-item-header:hover {
+            color: var(--accent);
+        }
+
+        .profile-item-header.active {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--shadow);
+        }
+
+        /* Help Text Styles - Remove this section since help text will be in menu */
+        /* Expanded Settings Styles */
         .settings-content {
             max-height: 80vh;
             overflow-y: auto;
             padding-right: 1rem;
             position: relative;
-        }/* Custom scrollbar styling */
+        }
+
+        /* Custom scrollbar styling */
         .settings-content::-webkit-scrollbar {
             width: 12px;
         }
@@ -253,13 +297,77 @@
             margin-top: 2rem;
         }
 
+        .profiles-section {
+            margin-top: 2rem;
+        }
+
+        .profile-item {
+            background: var(--surface-primary);
+            border: 2px solid var(--border);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-item.active {
+            border-color: var(--accent);
+            background: rgba(96, 165, 250, 0.1);
+        }
+
+        .profile-item:hover {
+            border-color: var(--accent);
+            background: rgba(96, 165, 250, 0.05);
+        }
+
+        .profile-item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+
+        .profile-item.drag-over {
+            border-color: var(--accent);
+            background: rgba(96, 165, 250, 0.1);
+        }
+
+        .profile-name {
+            flex: 1;
+            color: var(--text-primary);
+            font-weight: bold;
+            word-break: break-word;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .profile-name-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid var(--accent);
+            border-radius: 0.5rem;
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-weight: bold;
+            font-size: inherit;
+            outline: none;
+            box-sizing: border-box;
+        }
+
         .section-title {
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 1rem;
             color: var(--text-primary);
             text-align: center;
-        }        .data-item {
+        }
+
+        .data-item {
             background: var(--surface-primary);
             border: 2px solid var(--border);
             border-radius: 1rem;
@@ -270,7 +378,9 @@
             gap: 0.8rem;
             position: relative;
             transition: all 0.3s ease;
-        }        .data-item.dragging {
+        }
+
+        .data-item.dragging {
             opacity: 0.5;
             transform: rotate(2deg);
         }
@@ -278,7 +388,9 @@
         .data-item.drag-over {
             border-color: var(--accent);
             background: rgba(96, 165, 250, 0.1);
-        }        /* Delete zone hint at bottom of screen */
+        }
+
+        /* Delete zone hint at bottom of screen */
         .drag-delete-hint {
             position: fixed;
             bottom: 20px;
@@ -471,7 +583,9 @@
 
         .url-input-container .setting-input {
             flex: 1;
-        }        .sync-icon {
+        }
+
+        .sync-icon {
             width: auto;
             height: 54px;
             padding: 0 1rem;
@@ -503,7 +617,9 @@
 
         .sync-icon.syncing svg {
             animation: spin 1s linear infinite;
-        }        @keyframes spin {
+        }
+
+        @keyframes spin {
             from {
                 transform: rotate(0deg);
             }
@@ -515,11 +631,16 @@
 
         /* Mobile compatibility styles */
         @media (max-width: 768px) {
+            body {
+                padding: 0 0.5rem;
+                box-sizing: border-box;
+            }
+
             #display {
                 font-size: 1.8rem;
                 padding: 1.5rem;
-                margin: 1rem;
-                width: calc(100vw - 2rem);
+                margin: 1.5rem;
+                width: calc(100vw - 3rem);
                 min-height: 150px;
             }
 
@@ -534,18 +655,32 @@
             }
 
             .popup-window {
-                width: 95%;
+                width: calc(100% - 2rem);
                 padding: 1.5rem;
                 margin: 1rem;
+                left: 1rem;
+                right: 1rem;
+                transform: translateY(-50%);
             }
 
             .popup-window.expanded {
                 max-width: none;
-                width: 95%;
+                width: calc(100% - 2rem);
             }
 
             .popup-title {
                 font-size: 1.5rem;
+            }
+
+            .profile-item {
+                padding: 0.8rem;
+                margin-bottom: 0.8rem;
+                gap: 0.8rem;
+            }
+
+            .profile-name {
+                font-size: 0.9rem;
+                padding: 0.4rem;
             }
 
             .data-item {
@@ -588,12 +723,23 @@
                 width: 40px;
                 height: 40px;
                 top: 15px;
-                right: 15px;
+                left: 15px;
             }
 
             .menu-icon svg {
                 width: 20px;
                 height: 20px;
+            }
+
+            .profile-selector {
+                top: 15px;
+                right: 15px;
+                max-width: 150px;
+            }
+
+            .profile-item-header {
+                padding: 0.2rem 0.6rem;
+                font-size: 0.8rem;
             }
 
             .setting-input {
@@ -619,9 +765,16 @@
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 0 0.5rem;
+                box-sizing: border-box;
+            }
+
             #display {
                 font-size: 1.5rem;
                 padding: 1rem;
+                margin: 1.5rem;
+                width: calc(100vw - 3rem);
             }
 
             .card-text {
@@ -630,15 +783,35 @@
 
             .popup-window {
                 padding: 1rem;
+                width: calc(100% - 2rem);
+                margin: 1rem;
+                left: 1rem;
+                right: 1rem;
+                transform: translateY(-50%);
             }
 
             .popup-title {
                 font-size: 1.3rem;
             }
+        }
 
-            .drag-delete-hint {
-                font-size: 0.6rem;
-                padding: 0.3rem 0.6rem;
+        @media (max-width: 320px) {
+            body {
+                padding: 0 0.75rem;
+            }
+
+            #display {
+                margin: 1rem;
+                width: calc(100vw - 2rem);
+                padding: 0.8rem;
+            }
+
+            .popup-window {
+                width: calc(100% - 1.5rem);
+                margin: 0.75rem;
+                left: 0.75rem;
+                right: 0.75rem;
+                padding: 0.8rem;
             }
         }
     </style>
@@ -650,22 +823,37 @@
         <svg viewBox="0 0 24 24">
             <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
         </svg>
-    </div>    <div id="display">
-        <div class="card-text">Click to get a random option</div>
     </div>
 
-    <!-- Delete hint at bottom of screen -->
+    <!-- Profile Selector -->
+    <div id="profileSelector" class="profile-selector"></div>
+    <div id="display">
+        <div class="card-text"></div>
+    </div> <!-- Delete hint at bottom of screen -->
     <div id="deleteHint" class="drag-delete-hint">🗑️ Drop here to delete</div><!-- Settings Popup -->
     <div id="settingsPopup" class="popup-overlay">
         <div class="popup-window expanded">
             <div class="settings-content">
                 <div class="popup-title">Settings</div>
 
+                <div class="profiles-section">
+                    <div class="section-title">Profiles</div>
+                    <div id="profilesList"></div>
+                    <button class="add-item-btn" onclick="addNewProfile()">+ Add New Profile</button>
+                </div>
+
                 <div class="data-section">
                     <div class="section-title">Data Items</div>
                     <div id="dataItemsList"></div>
                     <button class="add-item-btn" onclick="addNewItem()">+ Add New Item</button>
                 </div>
+
+                <div class="setting-row" style="margin-top: 2rem; text-align: center;">
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">
+                        💡 Double-click to edit • Drag to reorder
+                    </div>
+                </div>
+
                 <div class="setting-row">
                     <div class="setting-label">Server URL</div>
                     <div class="url-input-container">
@@ -689,21 +877,29 @@
             </div>
         </div>
     </div>
-    <script>
-        let weightedOptions = [];
+    <script>        let weightedOptions = [];
         let localData = []; // Store local copy for editing
+        let profilesData = []; // Store all profiles
+        let currentProfileIndex = 0; // Currently selected profile
         let displayElem = document.getElementById('display'); let currentUrl = '';
         let currentPassword = '';
         let isPopupOpen = false;
-        let lastSelectedOption = null;
-        function initializeSettings() {
+        let lastSelectedOption = null; function initializeSettings() {
             const savedUrl = localStorage.getItem('bored.url');
             const savedPassword = localStorage.getItem('bored.password');
+            const savedProfileIndex = localStorage.getItem('bored.currentProfileIndex');
             if (savedUrl) currentUrl = savedUrl;
             if (savedPassword) currentPassword = savedPassword;
+            if (savedProfileIndex) currentProfileIndex = parseInt(savedProfileIndex) || 0;
 
             // Always load data (will use default.json if no URL is saved)
             loadData().catch(() => openSettingsPopup());
+
+            // Initialize profile selector
+            updateProfileSelector();
+
+            // Add keyboard listener for backtick key
+            document.addEventListener('keydown', handleKeyDown);
         }
 
         function updateDisplay() {
@@ -773,7 +969,7 @@
 
             // Display the selected option as a card
             displayCard(selectedOption);
-        }        function displayCard(option) {
+        } function displayCard(option) {
             let cardHTML = `<div class="card-text">${option.text}</div>`;
 
             // Check if the option has a URL
@@ -793,18 +989,17 @@
             }
 
             displayElem.innerHTML = cardHTML;
-        }function loadData() {
+        } function loadData() {
             // If no URL is set, use default.json
             const dataUrl = currentUrl || 'default.json';
 
             // First try to load from localStorage
-            const savedData = localStorage.getItem('bored.localData');
-            const savedUrl = localStorage.getItem('bored.url');
-
-            if (savedData && savedUrl === currentUrl && currentUrl) {
+            const savedData = localStorage.getItem('bored.localProfiles');
+            const savedUrl = localStorage.getItem('bored.url'); if (savedData && savedUrl === currentUrl && currentUrl) {
                 try {
-                    localData = JSON.parse(savedData);
-                    processLocalData();
+                    profilesData = JSON.parse(savedData);
+                    processProfileData();
+                    updateProfileSelector();
                     updateDisplay();
                     return Promise.resolve();
                 } catch (e) {
@@ -820,24 +1015,35 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Validate that data is an array
-                    if (!Array.isArray(data)) {
-                        throw new Error('Data must be an array of options');
+                    // Check if data is in new profile format or old format
+                    if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].items) {
+                        // New profile format
+                        profilesData = data;
+                    } else if (Array.isArray(data)) {                        // Old format - wrap in a default profile
+                        profilesData = [{
+                            name: "Default",
+                            items: data.map(item => ({
+                                text: item.text || '',
+                                weight: item.weight || 1,
+                                url: item.url || ''
+                            }))
+                        }];
+                    } else {
+                        throw new Error('Data must be an array of profiles or items');
                     }
 
-                    // Store original data
-                    localData = data.map(item => ({
-                        text: item.text || '',
-                        weight: item.weight || 1,
-                        url: item.url || ''
-                    }));
+                    // Ensure currentProfileIndex is valid
+                    if (currentProfileIndex >= profilesData.length) {
+                        currentProfileIndex = 0;
+                    }
 
                     // Save to localStorage only if we have a custom URL
                     if (currentUrl) {
-                        localStorage.setItem('bored.localData', JSON.stringify(localData));
+                        localStorage.setItem('bored.localProfiles', JSON.stringify(profilesData));
                     }
 
-                    processLocalData();
+                    processProfileData();
+                    updateProfileSelector();
                     updateDisplay();
                 }).catch(error => {
                     console.error('Error loading data:', error);
@@ -847,11 +1053,18 @@
                     weightedOptions = [];
                     throw error;
                 });
-        }
+        } function processProfileData() {
+            // Extract data from current profile
+            if (profilesData.length === 0) {
+                localData = [];
+                weightedOptions = [];
+                return;
+            }
 
-        function processLocalData() {
+            const currentProfile = profilesData[currentProfileIndex] || profilesData[0];
+            localData = currentProfile.items || [];
+
             weightedOptions = [];
-
             for (const item of localData) {
                 const weight = item.weight || 1.0;
                 const text = item.text;
@@ -865,18 +1078,151 @@
                     });
                 }
             }
-
-            // Allow empty data - no error throwing
-        }
-
-        // Settings popup functions
+        }        // Settings popup functions
         function openSettingsPopup() {
             isPopupOpen = true;
             document.getElementById('urlInput').value = currentUrl || '';
             document.getElementById('passwordInput').value = currentPassword || '';
+            populateProfilesList();
             populateDataItemsList();
             document.getElementById('settingsPopup').style.display = 'block';
-        }        function populateDataItemsList() {
+        } function populateProfilesList() {
+            const listContainer = document.getElementById('profilesList');
+            listContainer.innerHTML = '';
+
+            profilesData.forEach((profile, index) => {
+                const profileDiv = document.createElement('div');
+                profileDiv.className = 'profile-item';
+                profileDiv.draggable = true;
+                profileDiv.dataset.index = index;
+                if (index === currentProfileIndex) {
+                    profileDiv.classList.add('active');
+                }
+
+                // Add drag handle
+                const dragHandle = document.createElement('div');
+                dragHandle.className = 'drag-handle';
+                dragHandle.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"/>
+                    </svg>
+                `;
+
+                // Drag event listeners
+                profileDiv.addEventListener('dragstart', handleProfileDragStart);
+                profileDiv.addEventListener('dragover', handleProfileDragOver);
+                profileDiv.addEventListener('drop', handleProfileDrop);
+                profileDiv.addEventListener('dragend', handleProfileDragEnd);
+                profileDiv.addEventListener('dragenter', handleProfileDragEnter);
+                profileDiv.addEventListener('dragleave', handleProfileDragLeave);
+
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'profile-name';
+                nameDiv.textContent = profile.name || `Profile ${index + 1}`;
+                nameDiv.addEventListener('dblclick', () => editProfileName(nameDiv, index));
+
+                profileDiv.addEventListener('click', (e) => {
+                    // Only select profile if not dragging and not double-clicking
+                    if (!e.detail || e.detail === 1) {
+                        setTimeout(() => {
+                            if (!profileDiv.classList.contains('dragging')) {
+                                selectProfile(index);
+                            }
+                        }, 200);
+                    }
+                });
+
+                profileDiv.appendChild(dragHandle);
+                profileDiv.appendChild(nameDiv);
+
+                listContainer.appendChild(profileDiv);
+            });
+        } function selectProfile(index) {
+            if (index >= 0 && index < profilesData.length) {
+                currentProfileIndex = index;
+                localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
+                processProfileData();
+                populateProfilesList();
+                populateDataItemsList();
+                updateProfileSelector();
+                updateDisplay();
+            }
+        } function editProfileName(nameDiv, index) {
+            const currentName = profilesData[index].name || '';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentName;
+            input.className = 'profile-name-input';
+
+            let isSaved = false;
+
+            function saveName() {
+                if (isSaved) return;
+                isSaved = true;
+
+                const newText = input.value.trim();
+                if (newText === '') {
+                    // Delete profile if name is empty and we have more than one profile
+                    if (profilesData.length > 1 && confirm('Delete this profile?')) {
+                        profilesData.splice(index, 1);
+
+                        // Adjust current profile index if necessary
+                        if (currentProfileIndex >= profilesData.length) {
+                            currentProfileIndex = profilesData.length - 1;
+                        } else if (currentProfileIndex > index) {
+                            currentProfileIndex--;
+                        }
+
+                        localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString()); processProfileData();
+                        populateProfilesList();
+                        populateDataItemsList();
+                        updateProfileSelector();
+                        return;
+                    } else {
+                        nameDiv.textContent = currentName || `Profile ${index + 1}`;
+                    }
+                } else {
+                    profilesData[index].name = newText;
+                    nameDiv.textContent = newText;
+                }
+                nameDiv.style.display = 'block';
+                if (input.parentNode) {
+                    input.remove();
+                }
+            }
+
+            input.addEventListener('blur', saveName);
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    saveName();
+                }
+            });
+
+            nameDiv.style.display = 'none';
+            nameDiv.parentNode.insertBefore(input, nameDiv);
+            input.focus();
+            input.select();
+        } function addNewProfile() {
+            const newProfile = {
+                name: `Profile ${profilesData.length + 1}`,
+                items: []
+            };
+            profilesData.push(newProfile);
+            populateProfilesList();
+            updateProfileSelector();
+
+            // Focus on the name input of the newly added profile
+            setTimeout(() => {
+                const profileNames = document.querySelectorAll('.profile-name');
+                if (profileNames.length > 0) {
+                    const lastProfile = profileNames[profileNames.length - 1];
+                    lastProfile.dispatchEvent(new Event('dblclick'));
+                }
+            }, 100);
+        }
+
+        function populateDataItemsList() {
             const listContainer = document.getElementById('dataItemsList');
             listContainer.innerHTML = '';
 
@@ -927,7 +1273,7 @@
                 weightSlider.min = '1';
                 weightSlider.max = '10';
                 weightSlider.value = item.weight || 1;
-                weightSlider.className = 'inline-weight-slider';                const weightDisplay = document.createElement('span');
+                weightSlider.className = 'inline-weight-slider'; const weightDisplay = document.createElement('span');
                 weightDisplay.className = 'weight-display';
                 weightDisplay.textContent = item.weight || 1;
                 weightSlider.addEventListener('input', function () {
@@ -947,7 +1293,7 @@
 
                 listContainer.appendChild(itemDiv);
             });
-        }        function editText(textDiv, originalIndex) {
+        } function editText(textDiv, originalIndex) {
             // Find the current index in case items were reordered
             const itemDiv = textDiv.closest('.data-item');
             const currentIndex = parseInt(itemDiv.dataset.index);
@@ -957,13 +1303,13 @@
             input.type = 'text';
             input.value = currentText;
             input.className = 'data-item-text-input';
-            
+
             let isSaved = false;
-            
+
             function saveText() {
                 if (isSaved) return;
                 isSaved = true;
-                
+
                 const newText = input.value.trim(); if (newText === '') {
                     // Delete item if text is empty
                     if (confirm('Delete this item?')) {
@@ -980,7 +1326,7 @@
                 if (input.parentNode) {
                     input.remove();
                 }
-            }            input.addEventListener('blur', saveText);
+            } input.addEventListener('blur', saveText);
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     saveText();
@@ -1001,7 +1347,7 @@
             textDiv.parentNode.insertBefore(input, textDiv);
             input.focus();
             input.select();
-        }        function editUrl(urlDiv, originalIndex) {
+        } function editUrl(urlDiv, originalIndex) {
             // Find the current index in case items were reordered
             const itemDiv = urlDiv.closest('.data-item');
             const currentIndex = parseInt(itemDiv.dataset.index);
@@ -1011,20 +1357,20 @@
             input.type = 'url';
             input.value = currentUrl;
             input.className = 'data-item-url-input';
-            
+
             let isSaved = false;
-            
+
             function saveUrl() {
                 if (isSaved) return;
                 isSaved = true;
-                
+
                 const newUrl = input.value.trim(); localData[currentIndex].url = newUrl;
                 urlDiv.textContent = newUrl;
                 urlDiv.style.display = 'block';
                 if (input.parentNode) {
                     input.remove();
                 }
-            }            input.addEventListener('blur', saveUrl);
+            } input.addEventListener('blur', saveUrl);
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     saveUrl();
@@ -1038,16 +1384,20 @@
             urlDiv.parentNode.insertBefore(input, urlDiv);
             input.focus();
             input.select();
-        }function closeSettingsPopup() {
+        } function closeSettingsPopup() {
             isPopupOpen = false;
             document.getElementById('settingsPopup').style.display = 'none';
+        } function updateLocalDisplay() {
+            // Update current profile's items with local data changes
+            if (profilesData.length > 0 && currentProfileIndex < profilesData.length) {
+                profilesData[currentProfileIndex].items = [...localData];
+            }
+            // Just update the display without saving
+            processProfileData();
+            updateDisplay();
         }
 
-        function updateLocalDisplay() {
-            // Just update the display without saving
-            processLocalData();
-            updateDisplay();
-        } function syncFromServer() {
+        function syncFromServer() {
             // Get URL from input field in case it was changed but not saved yet
             const urlFromInput = document.getElementById('urlInput').value.trim();
             const urlToSync = urlFromInput || currentUrl;
@@ -1068,21 +1418,32 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Validate that data is an array
-                    if (!Array.isArray(data)) {
-                        throw new Error('Data must be an array of options');
+                    // Check if data is in new profile format or old format
+                    if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].items) {
+                        // New profile format
+                        profilesData = data;
+                    } else if (Array.isArray(data)) {
+                        // Old format - wrap in a default profile
+                        profilesData = [{
+                            name: "Default",
+                            items: data.map(item => ({
+                                text: item.text || '',
+                                weight: item.weight || 1,
+                                url: item.url || ''
+                            }))
+                        }];
+                    } else {
+                        throw new Error('Data must be an array of profiles or items');
                     }
 
-                    // Override local data with server data
-                    localData = data.map(item => ({
-                        text: item.text || '',
-                        weight: item.weight || 1,
-                        url: item.url || ''
-                    }));
-
-                    // Update the display and repopulate the list
+                    // Reset to first profile
+                    currentProfileIndex = 0;
+                    localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());                    // Update the display and repopulate the lists
+                    processProfileData();
+                    populateProfilesList();
                     populateDataItemsList();
-                    updateLocalDisplay();
+                    updateProfileSelector();
+                    updateDisplay();
                 })
                 .catch(error => {
                     console.error('Error syncing from server:', error);
@@ -1091,7 +1452,9 @@
                 .finally(() => {
                     syncIcon.classList.remove('syncing');
                 });
-        } function postDataToUrl() {
+        }
+
+        function postDataToUrl() {
             if (!currentUrl || !currentPassword) {
                 return Promise.resolve();
             }
@@ -1105,11 +1468,16 @@
             const parentPath = pathSegments.slice(0, -1).join('/');
             const postUrl = url.origin + (parentPath ? '/' + parentPath : '');
 
+            // Update current profile with latest local data
+            if (profilesData.length > 0 && currentProfileIndex < profilesData.length) {
+                profilesData[currentProfileIndex].items = [...localData];
+            }
+
             const payload = {
                 key: key,
-                value: localData,
+                value: profilesData, // Send all profiles instead of just current profile data
                 pswd: currentPassword
-            };            return fetch(postUrl, {
+            }; return fetch(postUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1119,7 +1487,7 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
+
                 // Check if response has content
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
@@ -1135,11 +1503,13 @@
                     });
                 }
             });
-        } function closeSettings() {
+        }
+
+        function closeSettings() {
             const newUrl = document.getElementById('urlInput').value.trim();
             const newPassword = document.getElementById('passwordInput').value.trim();
 
-            // Update local display
+            // Update current profile with latest local data
             updateLocalDisplay();
 
             // Save password
@@ -1152,9 +1522,9 @@
                 localStorage.setItem('bored.url', currentUrl);
             }
 
-            // Save local data to localStorage if we have a URL
+            // Save profiles data to localStorage if we have a URL
             if (currentUrl) {
-                localStorage.setItem('bored.localData', JSON.stringify(localData));
+                localStorage.setItem('bored.localProfiles', JSON.stringify(profilesData));
             }
 
             // Close popup first
@@ -1186,22 +1556,44 @@
                     lastItem.dispatchEvent(new Event('dblclick'));
                 }
             }, 100);
-        }        // Drag and drop functionality
+        }        // Unified drag and drop functionality
         let draggedElement = null;
         let draggedIndex = null;
-        let isOverDataList = false;        function handleDragStart(e) {
+        let draggedType = null; // 'data' or 'profile'
+        let isOverSourceList = false;
+        let isOverDeleteZone = false;
+
+        // Unified drag start handler
+        function handleUnifiedDragStart(e, type) {
             draggedElement = this;
             draggedIndex = parseInt(this.dataset.index);
+            draggedType = type;
             this.classList.add('dragging');
+
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/html', this.outerHTML);
-            
-            // Add document-level drag tracking for better detection
+
+            // Add document-level drag tracking
             document.addEventListener('dragover', handleDocumentDragOver);
-            
-            isOverDataList = true; // Start as true since drag starts inside the list
+            document.addEventListener('dragenter', handleDocumentDragEnter);
+            document.addEventListener('dragleave', handleDocumentDragLeave);
+
+            // Show delete hint
+            const deleteHint = document.getElementById('deleteHint');
+            deleteHint.classList.add('show');
+
+            isOverSourceList = true; // Start as true since drag starts inside the list
         }
 
+        // Profile drag start wrapper
+        function handleProfileDragStart(e) {
+            handleUnifiedDragStart.call(this, e, 'profile');
+        }        // Data item drag start wrapper  
+        function handleDragStart(e) {
+            handleUnifiedDragStart.call(this, e, 'data');
+        }
+
+        // Unified drag over handler
         function handleDragOver(e) {
             if (e.preventDefault) {
                 e.preventDefault();
@@ -1210,86 +1602,244 @@
             return false;
         }
 
+        // Unified drag enter handler
         function handleDragEnter(e) {
             if (this !== draggedElement) {
                 this.classList.add('drag-over');
             }
+            isOverSourceList = true;
         }
 
+        // Unified drag leave handler
         function handleDragLeave(e) {
             this.classList.remove('drag-over');
+            // Check if we're really leaving the source list area
+            const sourceList = draggedType === 'profile' ?
+                document.getElementById('profilesList') :
+                document.getElementById('dataItemsList');
+            const rect = sourceList.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                isOverSourceList = false;
+            }
         }
 
+        // Create separate handlers for profiles
+        function handleProfileDragOver(e) {
+            return handleDragOver.call(this, e);
+        }
+
+        function handleProfileDragEnter(e) {
+            return handleDragEnter.call(this, e);
+        } function handleProfileDragLeave(e) {
+            return handleDragLeave.call(this, e);
+        }
+
+        // Unified drop handler
         function handleDrop(e) {
             if (e.stopPropagation) {
                 e.stopPropagation();
             }
 
-            if (this !== draggedElement) {
+            if (draggedElement !== this) {
                 const targetIndex = parseInt(this.dataset.index);
-                
-                // Move the item in the localData array
-                const draggedItem = localData[draggedIndex];
-                localData.splice(draggedIndex, 1);
-                localData.splice(targetIndex, 0, draggedItem);
-                
-                // Refresh the list
-                populateDataItemsList();
-            }
-            
-            return false;
-        }        function handleDragEnd(e) {
-            this.classList.remove('dragging');
-            
-            // Clean up all drag-over classes
-            const allItems = document.querySelectorAll('.data-item');
-            allItems.forEach(item => {
-                item.classList.remove('drag-over');
-            });
-            
-            // Remove the event listeners
-            document.removeEventListener('dragover', handleDocumentDragOver);
-            
-            // Hide delete hint
-            const deleteHint = document.getElementById('deleteHint');
-            deleteHint.classList.remove('show');
-            
-            // Check if the item was dragged outside the data list
-            if (!isOverDataList && draggedElement && draggedIndex !== null) {
-                const itemText = localData[draggedIndex].text || 'this item';
-                if (confirm(`Delete "${itemText}"?`)) {
+
+                if (draggedType === 'profile') {
+                    // Handle profile reordering
+                    const draggedProfile = profilesData[draggedIndex];
+                    profilesData.splice(draggedIndex, 1);
+
+                    if (draggedIndex < targetIndex) {
+                        profilesData.splice(targetIndex - 1, 0, draggedProfile);
+                        if (currentProfileIndex === draggedIndex) {
+                            currentProfileIndex = targetIndex - 1;
+                        } else if (currentProfileIndex > draggedIndex && currentProfileIndex <= targetIndex) {
+                            currentProfileIndex--;
+                        }
+                    } else {
+                        profilesData.splice(targetIndex, 0, draggedProfile);
+                        if (currentProfileIndex === draggedIndex) {
+                            currentProfileIndex = targetIndex;
+                        } else if (currentProfileIndex >= targetIndex && currentProfileIndex < draggedIndex) {
+                            currentProfileIndex++;
+                        }
+                    }
+
+                    localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
+                    populateProfilesList();
+                } else if (draggedType === 'data') {
+                    // Handle data item reordering
+                    const draggedItem = localData[draggedIndex];
                     localData.splice(draggedIndex, 1);
+                    localData.splice(targetIndex, 0, draggedItem);
                     populateDataItemsList();
                 }
             }
-            
+
+            return false;
+        }        // Create separate drop handlers
+        function handleProfileDrop(e) {
+            return handleDrop.call(this, e);
+        }
+
+        // Unified drag end handler
+        function handleUnifiedDragEnd(e) {
+            this.classList.remove('dragging');
+
+            // Clean up all drag-over classes
+            const allItems = document.querySelectorAll(draggedType === 'profile' ? '.profile-item' : '.data-item');
+            allItems.forEach(item => {
+                item.classList.remove('dragging', 'drag-over');
+            });
+
+            // Remove event listeners
+            document.removeEventListener('dragover', handleDocumentDragOver);
+            document.removeEventListener('dragenter', handleDocumentDragEnter);
+            document.removeEventListener('dragleave', handleDocumentDragLeave);
+
+            // Hide delete hint
+            const deleteHint = document.getElementById('deleteHint');
+            deleteHint.classList.remove('show');
+
+            // Check if dropped on delete zone (only when over delete hint)
+            if (isOverDeleteZone) {
+                if (draggedType === 'profile' && profilesData.length > 1) {
+                    const profileName = profilesData[draggedIndex].name || `Profile ${draggedIndex + 1}`;
+                    if (confirm(`Delete profile "${profileName}"?`)) {
+                        profilesData.splice(draggedIndex, 1);
+
+                        // Adjust current profile index if necessary
+                        if (currentProfileIndex >= profilesData.length) {
+                            currentProfileIndex = profilesData.length - 1;
+                        } else if (currentProfileIndex > draggedIndex) {
+                            currentProfileIndex--;
+                        } else if (currentProfileIndex === draggedIndex) {
+                            currentProfileIndex = 0;
+                        }
+
+                        localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
+                        processProfileData();
+                        populateProfilesList();
+                        populateDataItemsList();
+                    }
+                } else if (draggedType === 'data') {
+                    const itemText = localData[draggedIndex].text || 'this item';
+                    if (confirm(`Delete "${itemText}"?`)) {
+                        localData.splice(draggedIndex, 1);
+                        populateDataItemsList();
+                    }
+                }
+            }
+
+            // Reset drag state
             draggedElement = null;
             draggedIndex = null;
-            isOverDataList = false;
-        }function handleDocumentDragOver(e) {
-            e.preventDefault();
-            
-            // Check if we're over the data items list
-            const dataItemsList = document.getElementById('dataItemsList');
-            const rect = dataItemsList.getBoundingClientRect();
+            draggedType = null;
+            isOverSourceList = false;
+            isOverDeleteZone = false;
+        }
+
+        // Create separate drag end handlers
+        function handleProfileDragEnd(e) {
+            return handleUnifiedDragEnd.call(this, e);
+        } function handleDragEnd(e) {
+            return handleUnifiedDragEnd.call(this, e);
+        }
+
+        // Document-level drag tracking to detect delete zone
+        function handleDocumentDragEnter(e) {
+            // Check if over delete hint
+            const deleteHint = document.getElementById('deleteHint');
+            const rect = deleteHint.getBoundingClientRect();
             const x = e.clientX;
             const y = e.clientY;
-            
-            const previousState = isOverDataList;
-            isOverDataList = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
-              // Only update delete hint when state changes
-            if (previousState !== isOverDataList) {
-                const deleteHint = document.getElementById('deleteHint');
-                if (isOverDataList) {
+
+            isOverDeleteZone = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+        }
+
+        function handleDocumentDragLeave(e) {
+            // Check if leaving delete hint area
+            const deleteHint = document.getElementById('deleteHint');
+            const rect = deleteHint.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                isOverDeleteZone = false;
+            }
+        }
+
+        // Updated document drag over handler to track delete zone
+        function handleDocumentDragOver(e) {
+            e.preventDefault();
+
+            // Check if we're over the delete hint (red text)
+            const deleteHint = document.getElementById('deleteHint');
+            const rect = deleteHint.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            const previousDeleteState = isOverDeleteZone;
+            isOverDeleteZone = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+
+            // Check if we're over the source list
+            const sourceList = draggedType === 'profile' ?
+                document.getElementById('profilesList') :
+                document.getElementById('dataItemsList');
+            const sourceRect = sourceList.getBoundingClientRect();
+
+            const previousSourceState = isOverSourceList;
+            isOverSourceList = (x >= sourceRect.left && x <= sourceRect.right &&
+                y >= sourceRect.top && y <= sourceRect.bottom);
+
+            // Only update delete hint visibility when state changes
+            if (previousDeleteState !== isOverDeleteZone || previousSourceState !== isOverSourceList) {
+                if (isOverDeleteZone) {
+                    deleteHint.style.backgroundColor = 'rgba(220, 38, 38, 1)'; // Brighter red when hovering
+                } else if (isOverSourceList) {
                     deleteHint.classList.remove('show');
                 } else {
                     deleteHint.classList.add('show');
+                    deleteHint.style.backgroundColor = 'rgba(220, 38, 38, 0.9)'; // Normal red
                 }
-            }}
+            }
+        }
 
-        // Event listeners
+        // Profile selector functions
+        function updateProfileSelector() {
+            const selectorContainer = document.getElementById('profileSelector');
+            selectorContainer.innerHTML = '';
+
+            profilesData.forEach((profile, index) => {
+                const profileButton = document.createElement('div');
+                profileButton.className = 'profile-item-header';
+                profileButton.textContent = profile.name || `Profile ${index + 1}`;
+
+                if (index === currentProfileIndex) {
+                    profileButton.classList.add('active');
+                }
+
+                profileButton.addEventListener('click', () => selectProfile(index));
+                selectorContainer.appendChild(profileButton);
+            });
+        }
+
+        // Keyboard event handler
+        function handleKeyDown(e) {
+            // Check for backtick key (keyCode 192 or key "`")
+            if (e.key === '`' || e.keyCode === 192) {
+                e.preventDefault();
+                if (isPopupOpen) {
+                    closeSettingsPopup();
+                } else {
+                    openSettingsPopup();
+                }
+            }
+        }        // Event listeners
         let hasTouchSupport = 'ontouchstart' in window;
-        
+
         // Add touch support for mobile drag and drop
         if (hasTouchSupport) {
             document.addEventListener('touchstart', (e) => {
@@ -1297,54 +1847,84 @@
                     updateDisplay();
                 }
             });
-            
+
             // Mobile drag detection using touch events
             let touchStartY = 0;
             let touchStartElement = null;
-            
+            let touchStartProfile = null;
+
             document.addEventListener('touchstart', (e) => {
-                const target = e.target.closest('.data-item');
-                if (target && target.draggable) {
+                const dataTarget = e.target.closest('.data-item');
+                const profileTarget = e.target.closest('.profile-item');
+
+                if (dataTarget && dataTarget.draggable) {
                     touchStartY = e.touches[0].clientY;
-                    touchStartElement = target;
+                    touchStartElement = dataTarget;
+                } else if (profileTarget && profileTarget.draggable) {
+                    touchStartY = e.touches[0].clientY;
+                    touchStartProfile = profileTarget;
                 }
             });
-            
+
             document.addEventListener('touchmove', (e) => {
                 if (touchStartElement) {
                     e.preventDefault(); // Prevent scrolling while dragging
                     const currentY = e.touches[0].clientY;
                     const deltaY = Math.abs(currentY - touchStartY);
-                    
+
                     // Start drag simulation if moved enough
                     if (deltaY > 10 && !touchStartElement.classList.contains('dragging')) {
                         // Simulate drag start
                         draggedElement = touchStartElement;
                         draggedIndex = parseInt(touchStartElement.dataset.index);
                         touchStartElement.classList.add('dragging');
-                        
+
                         // Add document drag listener
                         document.addEventListener('touchmove', handleTouchDragOver);
                         isOverDataList = true;
+
+                        // Show delete hint
+                        const deleteHint = document.getElementById('deleteHint');
+                        deleteHint.classList.add('show');
+                    }
+                } else if (touchStartProfile) {
+                    e.preventDefault(); // Prevent scrolling while dragging
+                    const currentY = e.touches[0].clientY;
+                    const deltaY = Math.abs(currentY - touchStartY);
+
+                    // Start drag simulation if moved enough
+                    if (deltaY > 10 && !touchStartProfile.classList.contains('dragging')) {
+                        // Simulate profile drag start
+                        draggedProfileElement = touchStartProfile;
+                        draggedProfileIndex = parseInt(touchStartProfile.dataset.index);
+                        touchStartProfile.classList.add('dragging');
+
+                        // Add document drag listener
+                        document.addEventListener('touchmove', handleTouchProfileDragOver);
+                        isOverProfilesList = true;
+
+                        // Show delete hint
+                        const deleteHint = document.getElementById('deleteHint');
+                        deleteHint.classList.add('show');
                     }
                 }
             });
-            
+
             document.addEventListener('touchend', (e) => {
                 if (touchStartElement && touchStartElement.classList.contains('dragging')) {
                     // Simulate drag end
                     touchStartElement.classList.remove('dragging');
-                    
+
                     // Clean up
                     const allItems = document.querySelectorAll('.data-item');
                     allItems.forEach(item => item.classList.remove('drag-over'));
-                    
+
                     document.removeEventListener('touchmove', handleTouchDragOver);
-                    
+
                     // Hide delete hint
                     const deleteHint = document.getElementById('deleteHint');
                     deleteHint.classList.remove('show');
-                    
+
                     // Check for deletion
                     if (!isOverDataList && draggedElement && draggedIndex !== null) {
                         const itemText = localData[draggedIndex].text || 'this item';
@@ -1353,30 +1933,91 @@
                             populateDataItemsList();
                         }
                     }
-                    
+
                     // Reset
                     draggedElement = null;
                     draggedIndex = null;
                     isOverDataList = false;
-                }
-                touchStartElement = null;
+                } else if (touchStartProfile && touchStartProfile.classList.contains('dragging')) {
+                    // Simulate profile drag end
+                    touchStartProfile.classList.remove('dragging');
+
+                    // Clean up
+                    const allProfiles = document.querySelectorAll('.profile-item');
+                    allProfiles.forEach(item => item.classList.remove('drag-over'));
+
+                    document.removeEventListener('touchmove', handleTouchProfileDragOver);
+
+                    // Hide delete hint
+                    const deleteHint = document.getElementById('deleteHint');
+                    deleteHint.classList.remove('show');
+
+                    // Check for deletion
+                    if (!isOverProfilesList && draggedProfileElement && draggedProfileIndex !== null && profilesData.length > 1) {
+                        const profileName = profilesData[draggedProfileIndex].name || `Profile ${draggedProfileIndex + 1}`;
+                        if (confirm(`Delete profile "${profileName}"?`)) {
+                            profilesData.splice(draggedProfileIndex, 1);
+
+                            // Adjust current profile index if necessary
+                            if (currentProfileIndex >= profilesData.length) {
+                                currentProfileIndex = profilesData.length - 1;
+                            } else if (currentProfileIndex > draggedProfileIndex) {
+                                currentProfileIndex--;
+                            } else if (currentProfileIndex === draggedProfileIndex) {
+                                currentProfileIndex = 0;
+                            }
+
+                            localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
+                            processProfileData();
+                            populateProfilesList();
+                            populateDataItemsList();
+                        }
+                    }
+
+                    // Reset
+                    draggedProfileElement = null;
+                    draggedProfileIndex = null;
+                    isOverProfilesList = false;
+                } touchStartElement = null;
+                touchStartProfile = null;
                 touchStartY = 0;
             });
-            
+
             function handleTouchDragOver(e) {
                 if (!draggedElement) return;
-                
+
                 const touch = e.touches[0];
                 const dataItemsList = document.getElementById('dataItemsList');
                 const rect = dataItemsList.getBoundingClientRect();
-                
+
                 const previousState = isOverDataList;
-                isOverDataList = (touch.clientX >= rect.left && touch.clientX <= rect.right && 
-                                touch.clientY >= rect.top && touch.clientY <= rect.bottom);
-                
+                isOverDataList = (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom);
+
                 if (previousState !== isOverDataList) {
                     const deleteHint = document.getElementById('deleteHint');
                     if (isOverDataList) {
+                        deleteHint.classList.remove('show');
+                    } else {
+                        deleteHint.classList.add('show');
+                    }
+                }
+            }
+
+            function handleTouchProfileDragOver(e) {
+                if (!draggedProfileElement) return;
+
+                const touch = e.touches[0];
+                const profilesList = document.getElementById('profilesList');
+                const rect = profilesList.getBoundingClientRect();
+
+                const previousState = isOverProfilesList;
+                isOverProfilesList = (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom);
+
+                if (previousState !== isOverProfilesList) {
+                    const deleteHint = document.getElementById('deleteHint');
+                    if (isOverProfilesList) {
                         deleteHint.classList.remove('show');
                     } else {
                         deleteHint.classList.add('show');
@@ -1392,7 +2033,14 @@
         }
 
         // Initialize on page load
-        initializeSettings();
+        document.addEventListener('DOMContentLoaded', initializeSettings);
+
+        // Fallback initialization in case DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeSettings);
+        } else {
+            initializeSettings();
+        }
     </script>
 </body>
 
