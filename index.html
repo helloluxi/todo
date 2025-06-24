@@ -1838,22 +1838,18 @@
                 }
             }
         }        // Event listeners
-        let hasTouchSupport = 'ontouchstart' in window;
-
-        // Add touch support for mobile drag and drop
+        let hasTouchSupport = 'ontouchstart' in window;        // Add touch support for mobile drag and drop
         if (hasTouchSupport) {
             document.addEventListener('touchstart', (e) => {
                 if (!isPopupOpen) {
                     updateDisplay();
                 }
-            });
+            }, { passive: false });
 
             // Mobile drag detection using touch events
             let touchStartY = 0;
             let touchStartElement = null;
-            let touchStartProfile = null;
-
-            document.addEventListener('touchstart', (e) => {
+            let touchStartProfile = null;            document.addEventListener('touchstart', (e) => {
                 const dataTarget = e.target.closest('.data-item');
                 const profileTarget = e.target.closest('.profile-item');
 
@@ -1864,9 +1860,7 @@
                     touchStartY = e.touches[0].clientY;
                     touchStartProfile = profileTarget;
                 }
-            });
-
-            document.addEventListener('touchmove', (e) => {
+            }, { passive: false });            document.addEventListener('touchmove', (e) => {
                 if (touchStartElement) {
                     e.preventDefault(); // Prevent scrolling while dragging
                     const currentY = e.touches[0].clientY;
@@ -1880,7 +1874,7 @@
                         touchStartElement.classList.add('dragging');
 
                         // Add document drag listener
-                        document.addEventListener('touchmove', handleTouchDragOver);
+                        document.addEventListener('touchmove', handleTouchDragOver, { passive: false });
                         isOverDataList = true;
 
                         // Show delete hint
@@ -1900,7 +1894,7 @@
                         touchStartProfile.classList.add('dragging');
 
                         // Add document drag listener
-                        document.addEventListener('touchmove', handleTouchProfileDragOver);
+                        document.addEventListener('touchmove', handleTouchProfileDragOver, { passive: false });
                         isOverProfilesList = true;
 
                         // Show delete hint
@@ -1908,7 +1902,7 @@
                         deleteHint.classList.add('show');
                     }
                 }
-            });
+            }, { passive: false });
 
             document.addEventListener('touchend', (e) => {
                 if (touchStartElement && touchStartElement.classList.contains('dragging')) {
@@ -1977,11 +1971,10 @@
                     // Reset
                     draggedProfileElement = null;
                     draggedProfileIndex = null;
-                    isOverProfilesList = false;
-                } touchStartElement = null;
+                    isOverProfilesList = false;                } touchStartElement = null;
                 touchStartProfile = null;
                 touchStartY = 0;
-            });
+            }, { passive: false });
 
             function handleTouchDragOver(e) {
                 if (!draggedElement) return;
