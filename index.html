@@ -923,7 +923,8 @@
                     <input type="password" id="passwordInput" class="setting-input" placeholder="For saving data">
                 </div>
                 <div class="popup-buttons">
-                    <button class="popup-button" onclick="closeSettings()">Close</button>
+                    <button class="popup-button" onclick="cancelSettings()">Cancel</button>
+                    <button class="popup-button" onclick="saveSettings()">Save</button>
                 </div>
             </div>
         </div>
@@ -1137,30 +1138,6 @@
             populateProfilesList();
             populateDataItemsList();
             document.getElementById('settingsPopup').style.display = 'block';
-            // Add event listener for URL input blur to auto-sync
-            const urlInput = document.getElementById('urlInput');
-            if (urlInput && !urlInput.hasAttribute('data-listener-added')) {
-                urlInput.setAttribute('data-listener-added', 'true');
-                urlInput.addEventListener('blur', handleUrlInputBlur);
-            }
-        }
-
-        // Handle URL input blur to sync from new URL
-        function handleUrlInputBlur(e) {
-            const newUrl = e.target.value.trim();
-
-            // Only sync if URL is not empty and different from current URL
-            if (newUrl && newUrl !== currentUrl) {
-                // Temporarily update currentUrl for sync
-                const originalUrl = currentUrl;
-                currentUrl = newUrl;
-
-                // Sync from new URL
-                syncFromServer();
-
-                // Restore original URL (it will be properly updated when settings are closed)
-                currentUrl = originalUrl;
-            }
         }
 
         function populateProfilesList() {
@@ -1191,13 +1168,16 @@
                 profileDiv.addEventListener('dragenter', handleProfileDragEnter);
                 profileDiv.addEventListener('dragleave', handleProfileDragLeave);
 
-                // Disable dragging when interacting with input fields
-                profileDiv.addEventListener('mousedown', (e) => {
-                    if (e.target.tagName === 'INPUT' || e.target.closest('input')) {
-                        profileDiv.draggable = false;
-                    } else {
-                        profileDiv.draggable = true;
-                    }
+                // Only allow dragging from the drag handle
+                profileDiv.draggable = false;
+                dragHandle.addEventListener('mousedown', () => {
+                    profileDiv.draggable = true;
+                });
+                profileDiv.addEventListener('mouseup', () => {
+                    profileDiv.draggable = false;
+                });
+                profileDiv.addEventListener('mouseleave', () => {
+                    profileDiv.draggable = false;
                 });
 
                 const nameDiv = document.createElement('div');
@@ -1274,19 +1254,11 @@
                 if (input.parentNode) {
                     input.remove();
                 }
-            } input.addEventListener('blur', saveName);
+            }            input.addEventListener('blur', saveName);
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     saveName();
                 }
-            });
-
-            // Disable dragging while input is active
-            input.addEventListener('focus', () => {
-                nameDiv.closest('.profile-item').draggable = false;
-            });
-            input.addEventListener('blur', () => {
-                nameDiv.closest('.profile-item').draggable = true;
             });
 
             nameDiv.style.display = 'none';
@@ -1337,13 +1309,16 @@
                 itemDiv.addEventListener('dragenter', handleDragEnter);
                 itemDiv.addEventListener('dragleave', handleDragLeave);
 
-                // Disable dragging when interacting with input fields
-                itemDiv.addEventListener('mousedown', (e) => {
-                    if (e.target.tagName === 'INPUT' || e.target.closest('input')) {
-                        itemDiv.draggable = false;
-                    } else {
-                        itemDiv.draggable = true;
-                    }
+                // Only allow dragging from the drag handle
+                itemDiv.draggable = false;
+                dragHandle.addEventListener('mousedown', () => {
+                    itemDiv.draggable = true;
+                });
+                itemDiv.addEventListener('mouseup', () => {
+                    itemDiv.draggable = false;
+                });
+                itemDiv.addEventListener('mouseleave', () => {
+                    itemDiv.draggable = false;
                 });
 
                 // Text element (editable on double click)
@@ -1440,14 +1415,6 @@
                 }
             });
 
-            // Disable dragging while input is active
-            input.addEventListener('focus', () => {
-                textDiv.closest('.data-item').draggable = false;
-            });
-            input.addEventListener('blur', () => {
-                textDiv.closest('.data-item').draggable = true;
-            });
-
             textDiv.style.display = 'none';
             textDiv.parentNode.insertBefore(input, textDiv);
             input.focus();
@@ -1483,14 +1450,6 @@
                     e.preventDefault();
                     saveUrl();
                 }
-            });
-
-            // Disable dragging while input is active
-            input.addEventListener('focus', () => {
-                urlDiv.closest('.data-item').draggable = false;
-            });
-            input.addEventListener('blur', () => {
-                urlDiv.closest('.data-item').draggable = true;
             });
 
             urlDiv.style.display = 'none';
@@ -1618,7 +1577,12 @@
             });
         }
 
-        function closeSettings() {
+        function cancelSettings() {
+            // Close popup without saving any changes
+            closeSettingsPopup();
+        }
+
+        function saveSettings() {
             const newUrl = document.getElementById('urlInput').value.trim();
             const newPassword = document.getElementById('passwordInput').value.trim();
 
