@@ -654,7 +654,9 @@
             to {
                 transform: rotate(360deg);
             }
-        }        /* Mobile compatibility styles */
+        }
+
+        /* Mobile compatibility styles */
         @media (max-width: 768px) {
             body {
                 padding: 0 0.5rem;
@@ -758,7 +760,9 @@
             .weight-label {
                 font-size: 0.8rem;
                 min-width: 50px;
-            }            .menu-icon {
+            }
+
+            .menu-icon {
                 width: 40px;
                 height: 40px;
                 top: 15px;
@@ -804,7 +808,9 @@
                 font-size: 0.7rem;
                 padding: 0.4rem 0.8rem;
             }
-        }        @media (max-width: 480px) {
+        }
+
+        @media (max-width: 480px) {
             body {
                 padding: 0 0.5rem;
                 box-sizing: border-box;
@@ -840,7 +846,9 @@
             .popup-title {
                 font-size: 1.3rem;
             }
-        }        @media (max-width: 320px) {
+        }
+
+        @media (max-width: 320px) {
             body {
                 padding: 0 0.25rem;
             }
@@ -869,7 +877,7 @@
     </style>
 </head>
 
-<body>    <!-- Menu Icon -->
+<body> <!-- Menu Icon -->
     <div class="menu-icon" onclick="openSettingsPopup()">
         <svg viewBox="0 0 24 24">
             <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
@@ -901,14 +909,14 @@
 
                 <div class="setting-row" style="margin-top: 2rem; text-align: center;">
                     <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">
-                        💡 Double-click to edit • Drag to reorder
+                        💡 Double-click to edit 🧩 Drag to reorder or delete
                     </div>
                 </div>
 
                 <div class="setting-row">
                     <div class="setting-label">Server URL</div>
                     <div class="url-input-container">
-                        <input type="url" id="urlInput" class="setting-input" placeholder="URL to JSON file">
+                        <input type="url" id="urlInput" class="setting-input">
                         <div class="sync-icon" onclick="syncFromServer()" title="Sync from server">
                             <svg viewBox="0 0 24 24">
                                 <path
@@ -920,7 +928,7 @@
 
                 <div class="setting-row" style="margin-top: 2rem;">
                     <div class="setting-label">Password</div>
-                    <input type="password" id="passwordInput" class="setting-input" placeholder="For saving data">
+                    <input type="password" id="passwordInput" class="setting-input">
                 </div>
                 <div class="popup-buttons">
                     <button class="popup-button" onclick="cancelSettings()">Cancel</button>
@@ -929,7 +937,8 @@
             </div>
         </div>
     </div>
-    <script>        let weightedOptions = [];
+    <script>
+        let weightedOptions = [];
         let localData = []; // Store local copy for editing
         let profilesData = []; // Store all profiles
         let currentProfileIndex = 0; // Currently selected profile
@@ -1254,7 +1263,7 @@
                 if (input.parentNode) {
                     input.remove();
                 }
-            }            input.addEventListener('blur', saveName);
+            } input.addEventListener('blur', saveName);
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     saveName();
@@ -1918,22 +1927,22 @@
         let hasTouchSupport = 'ontouchstart' in window;
 
         // Add menu icon touch handling for mobile
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const menuIcon = document.querySelector('.menu-icon');
             if (menuIcon && hasTouchSupport) {
                 let touchStartTime = 0;
                 let touchMoved = false;
-                
-                menuIcon.addEventListener('touchstart', function(e) {
+
+                menuIcon.addEventListener('touchstart', function (e) {
                     touchStartTime = Date.now();
                     touchMoved = false;
                 }, { passive: true });
-                
-                menuIcon.addEventListener('touchmove', function(e) {
+
+                menuIcon.addEventListener('touchmove', function (e) {
                     touchMoved = true;
                 }, { passive: true });
-                
-                menuIcon.addEventListener('touchend', function(e) {
+
+                menuIcon.addEventListener('touchend', function (e) {
                     const touchDuration = Date.now() - touchStartTime;
                     if (!touchMoved && touchDuration < 500) {
                         e.preventDefault();
@@ -1957,12 +1966,12 @@
             // Mobile drag detection using touch events
             let touchStartY = 0;
             let touchStartElement = null;
-            let touchStartProfile = null;            document.addEventListener('touchstart', (e) => {
+            let touchStartProfile = null; document.addEventListener('touchstart', (e) => {
                 // Skip if touching menu icon
                 if (e.target.closest('.menu-icon')) {
                     return;
                 }
-                
+
                 const dataTarget = e.target.closest('.data-item');
                 const profileTarget = e.target.closest('.profile-item');
 
@@ -2132,7 +2141,8 @@
                         deleteHint.classList.add('show');
                     }
                 }
-            }        } else {
+            }
+        } else {
             document.addEventListener('click', (e) => {
                 // Skip if clicking menu icon
                 if (e.target.closest('.menu-icon')) {
