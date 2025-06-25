@@ -21,6 +21,23 @@
             --accent: #60a5fa;
         }
 
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        ::selection {
+            background-color: #ff8c00;
+            color: #ffffff;
+        }
+
+        ::-moz-selection {
+            background-color: #ff8c00;
+            color: #ffffff;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -33,24 +50,6 @@
             font-family: 'Comic Neue', cursive;
             user-select: none;
             gap: 2rem;
-        }
-
-        * {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        /* Custom text selection color - orange */
-        ::selection {
-            background-color: #ff8c00;
-            color: #ffffff;
-        }
-
-        ::-moz-selection {
-            background-color: #ff8c00;
-            color: #ffffff;
         }
 
         #display {
@@ -138,6 +137,11 @@
             color: var(--text-primary);
         }
 
+        .popup-window.expanded {
+            max-width: 600px;
+            width: 95%;
+        }
+
         .popup-title {
             font-size: 1.8rem;
             font-weight: bold;
@@ -212,7 +216,6 @@
             transform: translateY(0);
         }
 
-        /* Menu Icon Styles */
         .menu-icon {
             position: fixed;
             top: 20px;
@@ -242,7 +245,6 @@
             fill: var(--text-primary);
         }
 
-        /* Profile Selector Styles */
         .profile-selector {
             position: fixed;
             top: 20px;
@@ -280,8 +282,6 @@
             text-shadow: 0 0 10px var(--shadow);
         }
 
-        /* Help Text Styles - Remove this section since help text will be in menu */
-        /* Expanded Settings Styles */
         .settings-content {
             max-height: 80vh;
             overflow-y: auto;
@@ -289,7 +289,6 @@
             position: relative;
         }
 
-        /* Custom scrollbar styling */
         .settings-content::-webkit-scrollbar {
             width: 12px;
         }
@@ -308,15 +307,11 @@
             background: var(--surface-secondary);
         }
 
-        .data-section {
+        .data-section, .profiles-section {
             margin-top: 2rem;
         }
 
-        .profiles-section {
-            margin-top: 2rem;
-        }
-
-        .profile-item {
+        .profile-item, .data-item {
             background: var(--surface-primary);
             border: 2px solid var(--border);
             border-radius: 1rem;
@@ -330,27 +325,32 @@
             cursor: pointer;
         }
 
-        .profile-item.active {
+        .data-item {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .profile-item.active, .data-item.active {
             border-color: var(--accent);
             background: rgba(96, 165, 250, 0.1);
         }
 
-        .profile-item:hover {
+        .profile-item:hover, .data-item:hover {
             border-color: var(--accent);
             background: rgba(96, 165, 250, 0.05);
         }
 
-        .profile-item.dragging {
+        .profile-item.dragging, .data-item.dragging {
             opacity: 0.5;
             transform: rotate(2deg);
         }
 
-        .profile-item.drag-over {
+        .profile-item.drag-over, .data-item.drag-over {
             border-color: var(--accent);
             background: rgba(96, 165, 250, 0.1);
         }
 
-        .profile-name {
+        .profile-name, .data-item-text {
             flex: 1;
             color: var(--text-primary);
             font-weight: bold;
@@ -360,7 +360,15 @@
             transition: all 0.3s ease;
         }
 
-        .profile-name-input {
+        .data-item-text {
+            cursor: pointer;
+        }
+
+        .data-item-text:hover {
+            background: rgba(96, 165, 250, 0.1);
+        }
+
+        .profile-name-input, .data-item-text-input, .data-item-url-input {
             width: 100%;
             padding: 0.5rem;
             border: 2px solid var(--accent);
@@ -378,6 +386,12 @@
             -ms-user-select: text;
         }
 
+        .data-item-url-input {
+            font-size: 0.9rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 0.3rem;
+        }
+
         .section-title {
             font-size: 1.5rem;
             font-weight: bold;
@@ -386,30 +400,6 @@
             text-align: center;
         }
 
-        .data-item {
-            background: var(--surface-primary);
-            border: 2px solid var(--border);
-            border-radius: 1rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .data-item.dragging {
-            opacity: 0.5;
-            transform: rotate(2deg);
-        }
-
-        .data-item.drag-over {
-            border-color: var(--accent);
-            background: rgba(96, 165, 250, 0.1);
-        }
-
-        /* Delete zone hint at bottom of screen */
         .drag-delete-hint {
             position: fixed;
             bottom: 20px;
@@ -465,38 +455,6 @@
             fill: currentColor;
         }
 
-        .data-item-text {
-            color: var(--text-primary);
-            font-weight: bold;
-            word-break: break-word;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .data-item-text:hover {
-            background: rgba(96, 165, 250, 0.1);
-        }
-
-        .data-item-text-input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 2px solid var(--accent);
-            border-radius: 0.5rem;
-            background: var(--surface-secondary);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-weight: bold;
-            font-size: inherit;
-            outline: none;
-            box-sizing: border-box;
-            user-select: text;
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-        }
-
         .data-item-url {
             color: var(--text-secondary);
             font-size: 0.9rem;
@@ -508,23 +466,6 @@
 
         .data-item-url:hover {
             background: rgba(96, 165, 250, 0.1);
-        }
-
-        .data-item-url-input {
-            width: 100%;
-            padding: 0.3rem 0.5rem;
-            border: 2px solid var(--accent);
-            border-radius: 0.3rem;
-            background: var(--surface-secondary);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 0.9rem;
-            outline: none;
-            box-sizing: border-box;
-            user-select: text;
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
         }
 
         .weight-control {
@@ -595,13 +536,6 @@
             background: rgba(96, 165, 250, 0.1);
         }
 
-        /* Edit Panel Styles - Remove this section */
-        .popup-window.expanded {
-            max-width: 600px;
-            width: 95%;
-        }
-
-        /* Sync icon styles */
         .url-input-container {
             display: flex;
             gap: 0.5rem;
@@ -647,249 +581,71 @@
         }
 
         @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Mobile compatibility styles */
         @media (max-width: 768px) {
-            body {
-                padding: 0 0.5rem;
-                box-sizing: border-box;
-            }
-
-            #display {
-                font-size: 1.8rem;
-                padding: 1.5rem;
-                margin: 2rem;
-                width: calc(100vw - 4rem);
-                min-height: 150px;
-            }
-
-            .card-text {
-                font-size: 1.8rem;
-            }
-
-            .card-button {
-                font-size: 1rem;
-                padding: 0.8rem 1.5rem;
-                min-width: 100px;
-            }
-
-            .popup-window {
-                width: calc(100vw - 2rem);
-                padding: 1.5rem;
-                margin: 1rem;
-                left: 1rem;
-                right: 1rem;
-                transform: translateY(-50%);
-                max-height: calc(100vh - 2rem);
-                overflow: hidden;
-                box-sizing: border-box;
-            }
-
-            .popup-window.expanded {
-                max-width: none;
-                width: calc(100vw - 2rem);
-                max-height: calc(100vh - 2rem);
-            }
-
-            .settings-content {
-                max-height: calc(100vh - 8rem);
-                overflow-y: auto;
-                padding-right: 0.5rem;
-                margin-right: -0.5rem;
-            }
-
-            /* Fix scrollbar for mobile */
-            .settings-content::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            .popup-title {
-                font-size: 1.5rem;
-            }
-
-            .profile-item {
-                padding: 0.8rem;
-                margin-bottom: 0.8rem;
-                gap: 0.8rem;
-            }
-
-            .profile-name {
-                font-size: 0.9rem;
-                padding: 0.4rem;
-            }
-
-            .data-item {
-                padding: 0.8rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .drag-handle {
-                width: 20px;
-                height: 20px;
-                top: 0.3rem;
-                right: 0.3rem;
-            }
-
-            .drag-handle svg {
-                width: 14px;
-                height: 14px;
-            }
-
-            .data-item-text {
-                padding: 0.4rem;
-                font-size: 0.9rem;
-            }
-
-            .data-item-url {
-                font-size: 0.8rem;
-                padding: 0.2rem 0.4rem;
-            }
-
-            .weight-control {
-                gap: 0.8rem;
-            }
-
-            .weight-label {
-                font-size: 0.8rem;
-                min-width: 50px;
-            }
-
-            .menu-icon {
-                width: 40px;
-                height: 40px;
-                top: 15px;
-                left: 15px;
-                z-index: 1001;
-                -webkit-tap-highlight-color: transparent;
-                touch-action: manipulation;
-            }
-
-            .menu-icon svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .profile-selector {
-                top: 15px;
-                right: 15px;
-                max-width: 150px;
-            }
-
-            .profile-item-header {
-                padding: 0.2rem 0.6rem;
-                font-size: 0.8rem;
-            }
-
-            .setting-input {
-                padding: 0.8rem;
-                font-size: 0.9rem;
-            }
-
-            .sync-icon {
-                height: 44px;
-                padding: 0 0.8rem;
-            }
-
-            .sync-icon svg {
-                width: 16px;
-                height: 16px;
-            }
-
-            .drag-delete-hint {
-                bottom: 15px;
-                font-size: 0.7rem;
-                padding: 0.4rem 0.8rem;
-            }
+            body { padding: 0 0.5rem; box-sizing: border-box; }
+            #display { font-size: 1.8rem; padding: 1.5rem; margin: 2rem; width: calc(100vw - 4rem); min-height: 150px; }
+            .card-text { font-size: 1.8rem; }
+            .card-button { font-size: 1rem; padding: 0.8rem 1.5rem; min-width: 100px; }
+            .popup-window { width: calc(100vw - 2rem); padding: 1.5rem; margin: 1rem; left: 1rem; right: 1rem; transform: translateY(-50%); max-height: calc(100vh - 2rem); overflow: hidden; box-sizing: border-box; }
+            .popup-window.expanded { max-width: none; width: calc(100vw - 2rem); max-height: calc(100vh - 2rem); }
+            .settings-content { max-height: calc(100vh - 8rem); overflow-y: auto; padding-right: 0.5rem; margin-right: -0.5rem; }
+            .settings-content::-webkit-scrollbar { width: 8px; }
+            .popup-title { font-size: 1.5rem; }
+            .profile-item { padding: 0.8rem; margin-bottom: 0.8rem; gap: 0.8rem; }
+            .profile-name { font-size: 0.9rem; padding: 0.4rem; }
+            .data-item { padding: 0.8rem; margin-bottom: 0.8rem; }
+            .drag-handle { width: 20px; height: 20px; top: 0.3rem; right: 0.3rem; }
+            .drag-handle svg { width: 14px; height: 14px; }
+            .data-item-text { padding: 0.4rem; font-size: 0.9rem; }
+            .data-item-url { font-size: 0.8rem; padding: 0.2rem 0.4rem; }
+            .weight-control { gap: 0.8rem; }
+            .weight-label { font-size: 0.8rem; min-width: 50px; }
+            .menu-icon { width: 40px; height: 40px; top: 15px; left: 15px; z-index: 1001; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+            .menu-icon svg { width: 20px; height: 20px; }
+            .profile-selector { top: 15px; right: 15px; max-width: 150px; }
+            .profile-item-header { padding: 0.2rem 0.6rem; font-size: 0.8rem; }
+            .setting-input { padding: 0.8rem; font-size: 0.9rem; }
+            .sync-icon { height: 44px; padding: 0 0.8rem; }
+            .sync-icon svg { width: 16px; height: 16px; }
+            .drag-delete-hint { bottom: 15px; font-size: 0.7rem; padding: 0.4rem 0.8rem; }
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 0 0.5rem;
-                box-sizing: border-box;
-            }
-
-            #display {
-                font-size: 1.5rem;
-                padding: 1rem;
-                margin: 1.5rem;
-                width: calc(100vw - 3rem);
-            }
-
-            .card-text {
-                font-size: 1.5rem;
-            }
-
-            .popup-window {
-                padding: 1rem;
-                width: calc(100vw - 1rem);
-                margin: 0.5rem;
-                left: 0.5rem;
-                right: 0.5rem;
-                transform: translateY(-50%);
-                max-height: calc(100vh - 1rem);
-            }
-
-            .settings-content {
-                max-height: calc(100vh - 6rem);
-                padding-right: 0.25rem;
-                margin-right: -0.25rem;
-            }
-
-            .popup-title {
-                font-size: 1.3rem;
-            }
+            body { padding: 0 0.5rem; box-sizing: border-box; }
+            #display { font-size: 1.5rem; padding: 1rem; margin: 1.5rem; width: calc(100vw - 3rem); }
+            .card-text { font-size: 1.5rem; }
+            .popup-window { padding: 1rem; width: calc(100vw - 1rem); margin: 0.5rem; left: 0.5rem; right: 0.5rem; transform: translateY(-50%); max-height: calc(100vh - 1rem); }
+            .settings-content { max-height: calc(100vh - 6rem); padding-right: 0.25rem; margin-right: -0.25rem; }
+            .popup-title { font-size: 1.3rem; }
         }
 
         @media (max-width: 320px) {
-            body {
-                padding: 0 0.25rem;
-            }
-
-            #display {
-                margin: 1.25rem;
-                width: calc(100vw - 2.5rem);
-                padding: 0.8rem;
-            }
-
-            .popup-window {
-                width: calc(100vw - 0.5rem);
-                margin: 0.25rem;
-                left: 0.25rem;
-                right: 0.25rem;
-                padding: 0.8rem;
-                max-height: calc(100vh - 0.5rem);
-            }
-
-            .settings-content {
-                max-height: calc(100vh - 5rem);
-                padding-right: 0;
-                margin-right: 0;
-            }
+            body { padding: 0 0.25rem; }
+            #display { margin: 1.25rem; width: calc(100vw - 2.5rem); padding: 0.8rem; }
+            .popup-window { width: calc(100vw - 0.5rem); margin: 0.25rem; left: 0.25rem; right: 0.25rem; padding: 0.8rem; max-height: calc(100vh - 0.5rem); }
+            .settings-content { max-height: calc(100vh - 5rem); padding-right: 0; margin-right: 0; }
         }
     </style>
 </head>
 
-<body> <!-- Menu Icon -->
-    <div class="menu-icon" onclick="openSettingsPopup()">
+<body>
+    <div class="menu-icon" onclick="app.openSettings()">
         <svg viewBox="0 0 24 24">
             <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
         </svg>
     </div>
 
-    <!-- Profile Selector -->
     <div id="profileSelector" class="profile-selector"></div>
     <div id="display">
         <div class="card-text"></div>
-    </div> <!-- Delete hint at bottom of screen -->
-    <div id="deleteHint" class="drag-delete-hint">🗑️ Drop here to delete</div><!-- Settings Popup -->
+    </div>
+
+    <div id="deleteHint" class="drag-delete-hint">🗑️ Drop here to delete</div>
+
     <div id="settingsPopup" class="popup-overlay">
         <div class="popup-window expanded">
             <div class="settings-content">
@@ -898,13 +654,13 @@
                 <div class="profiles-section">
                     <div class="section-title">Profiles</div>
                     <div id="profilesList"></div>
-                    <button class="add-item-btn" onclick="addNewProfile()">+ Add New Profile</button>
+                    <button class="add-item-btn" onclick="app.addNewProfile()">+ Add New Profile</button>
                 </div>
 
                 <div class="data-section">
                     <div class="section-title">Data Items</div>
                     <div id="dataItemsList"></div>
-                    <button class="add-item-btn" onclick="addNewItem()">+ Add New Item</button>
+                    <button class="add-item-btn" onclick="app.addNewItem()">+ Add New Item</button>
                 </div>
 
                 <div class="setting-row" style="margin-top: 2rem; text-align: center;">
@@ -917,10 +673,9 @@
                     <div class="setting-label">Server URL</div>
                     <div class="url-input-container">
                         <input type="url" id="urlInput" class="setting-input">
-                        <div class="sync-icon" onclick="syncFromServer()" title="Sync from server">
+                        <div class="sync-icon" onclick="app.syncFromServer()" title="Sync from server">
                             <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z" />
+                                <path d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z" />
                             </svg>
                         </div>
                     </div>
@@ -930,1240 +685,894 @@
                     <div class="setting-label">Password</div>
                     <input type="password" id="passwordInput" class="setting-input">
                 </div>
+
                 <div class="popup-buttons">
-                    <button class="popup-button" onclick="cancelSettings()">Cancel</button>
-                    <button class="popup-button" onclick="saveSettings()">Save</button>
+                    <button class="popup-button" onclick="app.cancelSettings()">Cancel</button>
+                    <button class="popup-button" onclick="app.saveSettings()">Save</button>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
-        let weightedOptions = [];
-        let localData = []; // Store local copy for editing
-        let profilesData = []; // Store all profiles
-        let currentProfileIndex = 0; // Currently selected profile
-        let displayElem = document.getElementById('display'); let currentUrl = '';
-        let currentPassword = '';
-        let isPopupOpen = false;
-        let lastSelectedOption = null; function initializeSettings() {
-            const savedUrl = localStorage.getItem('bored.url');
-            const savedPassword = localStorage.getItem('bored.password');
-            const savedProfileIndex = localStorage.getItem('bored.currentProfileIndex');
-            if (savedUrl) currentUrl = savedUrl;
-            if (savedPassword) currentPassword = savedPassword;
-            if (savedProfileIndex) currentProfileIndex = parseInt(savedProfileIndex) || 0;
-
-            // Always load data (will use default.json if no URL is saved)
-            loadData().catch(() => openSettingsPopup());
-
-            // Initialize profile selector
-            updateProfileSelector();
-
-            // Add keyboard listener for backtick key
-            document.addEventListener('keydown', handleKeyDown);
-        }
-
-        function updateDisplay() {
-            if (!weightedOptions || weightedOptions.length === 0) {
-                displayElem.innerHTML = `
-                    <div class="card-text">No data available</div>
-                `;
-                return;
+        class BoredApp {
+            constructor() {
+                this.weightedOptions = [];
+                this.localData = [];
+                this.profilesData = [];
+                this.currentProfileIndex = 0;
+                this.displayElem = document.getElementById('display');
+                this.currentUrl = '';
+                this.currentPassword = '';
+                this.isPopupOpen = false;
+                this.lastSelectedOption = null;
+                this.lastSyncedUrl = '';
+                this.dragState = new DragState();
+                this.init();
             }
 
-            let selectedOption = null;
+            init() {
+                const savedUrl = localStorage.getItem('bored.url');
+                const savedPassword = localStorage.getItem('bored.password');
+                const savedProfileIndex = localStorage.getItem('bored.currentProfileIndex');
+                
+                if (savedUrl) this.currentUrl = savedUrl;
+                if (savedPassword) this.currentPassword = savedPassword;
+                if (savedProfileIndex) this.currentProfileIndex = parseInt(savedProfileIndex) || 0;
 
-            // If we have 2 or more options, ensure we don't repeat the last one
-            if (weightedOptions.length >= 2 && lastSelectedOption) {
-                const availableOptions = weightedOptions.filter(option => option !== lastSelectedOption);
+                this.loadData().catch(() => this.openSettings());
+                this.updateProfileSelector();
+                this.setupEventListeners();
+            }
 
-                if (availableOptions.length > 0) {
-                    // Calculate total weight for available options
-                    const totalWeight = availableOptions.reduce((sum, option) => sum + option.weight, 0);
+            setupEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === '`' || e.keyCode === 192) {
+                        e.preventDefault();
+                        this.isPopupOpen ? this.closeSettings() : this.openSettings();
+                    }
+                });
 
-                    // Generate random number between 0 and totalWeight
-                    const random = Math.random() * totalWeight;
-
-                    // Find the selected option based on weight
-                    let currentWeight = 0;
-                    for (const option of availableOptions) {
-                        currentWeight += option.weight;
-                        if (random <= currentWeight) {
-                            selectedOption = option;
-                            break;
+                const hasTouchSupport = 'ontouchstart' in window;
+                
+                if (hasTouchSupport) {
+                    this.setupTouchEvents();
+                    document.addEventListener('touchstart', (e) => {
+                        if (!e.target.closest('.menu-icon') && !this.isPopupOpen) {
+                            this.updateDisplay();
                         }
-                    }
-
-                    // Fallback to last available option
-                    if (!selectedOption) {
-                        selectedOption = availableOptions[availableOptions.length - 1];
-                    }
+                    }, { passive: false });
+                } else {
+                    document.addEventListener('click', (e) => {
+                        if (!e.target.closest('.menu-icon') && !this.isPopupOpen) {
+                            this.updateDisplay();
+                        }
+                    });
                 }
             }
 
-            // If we couldn't select from available options or have less than 2 options, use normal selection
-            if (!selectedOption) {
-                // Calculate total weight
-                const totalWeight = weightedOptions.reduce((sum, option) => sum + option.weight, 0);
+            setupTouchEvents() {
+                const menuIcon = document.querySelector('.menu-icon');
+                if (menuIcon) {
+                    let touchStartTime = 0;
+                    let touchMoved = false;
 
-                // Generate random number between 0 and totalWeight
+                    menuIcon.addEventListener('touchstart', (e) => {
+                        touchStartTime = Date.now();
+                        touchMoved = false;
+                    }, { passive: true });
+
+                    menuIcon.addEventListener('touchmove', () => {
+                        touchMoved = true;
+                    }, { passive: true });
+
+                    menuIcon.addEventListener('touchend', (e) => {
+                        const touchDuration = Date.now() - touchStartTime;
+                        if (!touchMoved && touchDuration < 500) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.openSettings();
+                        }
+                    }, { passive: false });
+                }
+            }
+
+            updateDisplay() {
+                if (!this.weightedOptions || this.weightedOptions.length === 0) {
+                    this.displayElem.innerHTML = '<div class="card-text">No data available</div>';
+                    return;
+                }
+
+                let selectedOption = this.selectRandomOption();
+                this.lastSelectedOption = selectedOption;
+                this.displayCard(selectedOption);
+            }
+
+            selectRandomOption() {
+                let availableOptions = this.weightedOptions;
+
+                if (this.weightedOptions.length >= 2 && this.lastSelectedOption) {
+                    availableOptions = this.weightedOptions.filter(option => option !== this.lastSelectedOption);
+                    if (availableOptions.length === 0) {
+                        availableOptions = this.weightedOptions;
+                    }
+                }
+
+                const totalWeight = availableOptions.reduce((sum, option) => sum + option.weight, 0);
                 const random = Math.random() * totalWeight;
-
-                // Find the selected option based on weight
+                
                 let currentWeight = 0;
-                for (const option of weightedOptions) {
+                for (const option of availableOptions) {
                     currentWeight += option.weight;
                     if (random <= currentWeight) {
-                        selectedOption = option;
-                        break;
+                        return option;
                     }
                 }
 
-                // Fallback to last option
-                if (!selectedOption) {
-                    selectedOption = weightedOptions[weightedOptions.length - 1];
-                }
+                return availableOptions[availableOptions.length - 1];
             }
 
-            // Store the selected option for next time
-            lastSelectedOption = selectedOption;
+            displayCard(option) {
+                let cardHTML = `<div class="card-text">${option.text}</div>`;
 
-            // Display the selected option as a card
-            displayCard(selectedOption);
-        } function displayCard(option) {
-            let cardHTML = `<div class="card-text">${option.text}</div>`;
-
-            // Check if the option has a URL
-            if (option.url) {
-                // Show full URL after https://
-                let displayUrl = option.url;
-                try {
-                    const url = new URL(option.url);
-                    // Remove protocol and show everything after https://
-                    displayUrl = option.url.replace(/^https?:\/\//, '');
-                } catch (e) {
-                    // If URL parsing fails, use the original URL
-                    displayUrl = option.url;
+                if (option.url) {
+                    let displayUrl = option.url.replace(/^https?:\/\//, '');
+                    cardHTML += `<a href="${option.url}" target="_blank" class="card-button" onclick="event.stopPropagation()">${displayUrl}</a>`;
                 }
 
-                cardHTML += `<a href="${option.url}" target="_blank" class="card-button" onclick="event.stopPropagation()">${displayUrl}</a>`;
+                this.displayElem.innerHTML = cardHTML;
             }
 
-            displayElem.innerHTML = cardHTML;
-        } function loadData() {
-            // If no URL is set, use default.json
-            const dataUrl = currentUrl || 'default.json';
-
-            // First try to load from localStorage
-            const savedData = localStorage.getItem('bored.localProfiles');
-            const savedUrl = localStorage.getItem('bored.url'); if (savedData && savedUrl === currentUrl && currentUrl) {
-                try {
-                    profilesData = JSON.parse(savedData);
-                    processProfileData();
-                    updateProfileSelector();
-                    updateDisplay();
-                    return Promise.resolve();
-                } catch (e) {
-                    console.warn('Failed to parse saved data, fetching from URL');
-                }
-            }
-
-            return fetch(dataUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Check if data is in new profile format or old format
-                    if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].items) {
-                        // New profile format
-                        profilesData = data;
-                    } else if (Array.isArray(data)) {                        // Old format - wrap in a default profile
-                        profilesData = [{
-                            name: "Default",
-                            items: data.map(item => ({
-                                text: item.text || '',
-                                weight: item.weight || 1,
-                                url: item.url || ''
-                            }))
-                        }];
-                    } else {
-                        throw new Error('Data must be an array of profiles or items');
-                    }
-
-                    // Ensure currentProfileIndex is valid
-                    if (currentProfileIndex >= profilesData.length) {
-                        currentProfileIndex = 0;
-                    }
-
-                    // Save to localStorage only if we have a custom URL
-                    if (currentUrl) {
-                        localStorage.setItem('bored.localProfiles', JSON.stringify(profilesData));
-                    }
-
-                    processProfileData();
-                    updateProfileSelector();
-                    updateDisplay();
-                }).catch(error => {
-                    console.error('Error loading data:', error);
-                    displayElem.innerHTML = `
-                        <div class="card-text">Error loading data</div>
-                    `;
-                    weightedOptions = [];
-                    throw error;
-                });
-        } function processProfileData() {
-            // Extract data from current profile
-            if (profilesData.length === 0) {
-                localData = [];
-                weightedOptions = [];
-                return;
-            }
-
-            const currentProfile = profilesData[currentProfileIndex] || profilesData[0];
-            localData = currentProfile.items || [];
-
-            weightedOptions = [];
-            for (const item of localData) {
-                const weight = item.weight || 1.0;
-                const text = item.text;
-                const url = item.url || null;
-
-                if (text && weight > 0) {
-                    weightedOptions.push({
-                        text,
-                        weight,
-                        url
-                    });
-                }
-            }
-        }        // Settings popup functions
-        function openSettingsPopup() {
-            isPopupOpen = true;
-            document.getElementById('urlInput').value = currentUrl || '';
-            document.getElementById('passwordInput').value = currentPassword || '';
-            populateProfilesList();
-            populateDataItemsList();
-            document.getElementById('settingsPopup').style.display = 'block';
-        }
-
-        function populateProfilesList() {
-            const listContainer = document.getElementById('profilesList');
-            listContainer.innerHTML = '';
-
-            profilesData.forEach((profile, index) => {
-                const profileDiv = document.createElement('div');
-                profileDiv.className = 'profile-item';
-                profileDiv.draggable = true;
-                profileDiv.dataset.index = index;
-                if (index === currentProfileIndex) {
-                    profileDiv.classList.add('active');
-                }
-
-                // Add drag handle
-                const dragHandle = document.createElement('div');
-                dragHandle.className = 'drag-handle';
-                dragHandle.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"/>
-                    </svg>
-                `;                // Drag event listeners
-                profileDiv.addEventListener('dragstart', handleProfileDragStart);
-                profileDiv.addEventListener('dragover', handleProfileDragOver);
-                profileDiv.addEventListener('drop', handleProfileDrop);
-                profileDiv.addEventListener('dragend', handleProfileDragEnd);
-                profileDiv.addEventListener('dragenter', handleProfileDragEnter);
-                profileDiv.addEventListener('dragleave', handleProfileDragLeave);
-
-                // Only allow dragging from the drag handle
-                profileDiv.draggable = false;
-                dragHandle.addEventListener('mousedown', () => {
-                    profileDiv.draggable = true;
-                });
-                profileDiv.addEventListener('mouseup', () => {
-                    profileDiv.draggable = false;
-                });
-                profileDiv.addEventListener('mouseleave', () => {
-                    profileDiv.draggable = false;
-                });
-
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'profile-name';
-                nameDiv.textContent = profile.name || `Profile ${index + 1}`;
-                nameDiv.addEventListener('dblclick', () => editProfileName(nameDiv, index));
-
-                profileDiv.addEventListener('click', (e) => {
-                    // Only select profile if not dragging and not double-clicking
-                    if (!e.detail || e.detail === 1) {
-                        setTimeout(() => {
-                            if (!profileDiv.classList.contains('dragging')) {
-                                selectProfile(index);
-                            }
-                        }, 200);
-                    }
-                });
-
-                profileDiv.appendChild(dragHandle);
-                profileDiv.appendChild(nameDiv);
-
-                listContainer.appendChild(profileDiv);
-            });
-        } function selectProfile(index) {
-            if (index >= 0 && index < profilesData.length) {
-                currentProfileIndex = index;
-                localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
-                processProfileData();
-                populateProfilesList();
-                populateDataItemsList();
-                updateProfileSelector();
-                updateDisplay();
-            }
-        } function editProfileName(nameDiv, index) {
-            const currentName = profilesData[index].name || '';
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentName;
-            input.className = 'profile-name-input';
-
-            let isSaved = false;
-
-            function saveName() {
-                if (isSaved) return;
-                isSaved = true;
-
-                const newText = input.value.trim();
-                if (newText === '') {
-                    // Delete profile if name is empty and we have more than one profile
-                    if (profilesData.length > 1 && confirm('Delete this profile?')) {
-                        profilesData.splice(index, 1);
-
-                        // Adjust current profile index if necessary
-                        if (currentProfileIndex >= profilesData.length) {
-                            currentProfileIndex = profilesData.length - 1;
-                        } else if (currentProfileIndex > index) {
-                            currentProfileIndex--;
-                        }
-
-                        localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString()); processProfileData();
-                        populateProfilesList();
-                        populateDataItemsList();
-                        updateProfileSelector();
-                        return;
-                    } else {
-                        nameDiv.textContent = currentName || `Profile ${index + 1}`;
-                    }
-                } else {
-                    profilesData[index].name = newText;
-                    nameDiv.textContent = newText;
-                }
-                nameDiv.style.display = 'block';
-                if (input.parentNode) {
-                    input.remove();
-                }
-            } input.addEventListener('blur', saveName);
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') {
-                    saveName();
-                }
-            });
-
-            nameDiv.style.display = 'none';
-            nameDiv.parentNode.insertBefore(input, nameDiv);
-            input.focus();
-            input.select();
-        } function addNewProfile() {
-            const newProfile = {
-                name: `Profile ${profilesData.length + 1}`,
-                items: []
-            };
-            profilesData.push(newProfile);
-            populateProfilesList();
-            updateProfileSelector();
-
-            // Focus on the name input of the newly added profile
-            setTimeout(() => {
-                const profileNames = document.querySelectorAll('.profile-name');
-                if (profileNames.length > 0) {
-                    const lastProfile = profileNames[profileNames.length - 1];
-                    lastProfile.dispatchEvent(new Event('dblclick'));
-                }
-            }, 100);
-        }
-
-        function populateDataItemsList() {
-            const listContainer = document.getElementById('dataItemsList');
-            listContainer.innerHTML = '';
-
-            localData.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'data-item';
-                itemDiv.draggable = true;
-                itemDiv.dataset.index = index;
-
-                // Add drag handle
-                const dragHandle = document.createElement('div');
-                dragHandle.className = 'drag-handle';
-                dragHandle.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"/>
-                    </svg>
-                `;                // Drag event listeners
-                itemDiv.addEventListener('dragstart', handleDragStart);
-                itemDiv.addEventListener('dragover', handleDragOver);
-                itemDiv.addEventListener('drop', handleDrop);
-                itemDiv.addEventListener('dragend', handleDragEnd);
-                itemDiv.addEventListener('dragenter', handleDragEnter);
-                itemDiv.addEventListener('dragleave', handleDragLeave);
-
-                // Only allow dragging from the drag handle
-                itemDiv.draggable = false;
-                dragHandle.addEventListener('mousedown', () => {
-                    itemDiv.draggable = true;
-                });
-                itemDiv.addEventListener('mouseup', () => {
-                    itemDiv.draggable = false;
-                });
-                itemDiv.addEventListener('mouseleave', () => {
-                    itemDiv.draggable = false;
-                });
-
-                // Text element (editable on double click)
-                const textDiv = document.createElement('div');
-                textDiv.className = 'data-item-text';
-                textDiv.textContent = item.text || 'Empty text';
-                textDiv.addEventListener('dblclick', () => editText(textDiv, index));
-                // URL element (editable on double click)
-                const urlDiv = document.createElement('div');
-                urlDiv.className = 'data-item-url';
-                urlDiv.textContent = item.url ? item.url : ' ';
-                urlDiv.addEventListener('dblclick', () => editUrl(urlDiv, index));
-
-                // Weight control
-                const weightDiv = document.createElement('div');
-                weightDiv.className = 'weight-control';
-
-                const weightLabel = document.createElement('span');
-                weightLabel.className = 'weight-label';
-                weightLabel.textContent = 'Weight:';
-
-                const weightSlider = document.createElement('input');
-                weightSlider.type = 'range';
-                weightSlider.min = '1';
-                weightSlider.max = '10';
-                weightSlider.value = item.weight || 1;
-                weightSlider.className = 'inline-weight-slider'; const weightDisplay = document.createElement('span');
-                weightDisplay.className = 'weight-display';
-                weightDisplay.textContent = item.weight || 1;
-                weightSlider.addEventListener('input', function () {
-                    const currentIndex = parseInt(itemDiv.dataset.index);
-                    weightDisplay.textContent = this.value;
-                    localData[currentIndex].weight = parseInt(this.value);
-                });
-
-                weightDiv.appendChild(weightLabel);
-                weightDiv.appendChild(weightSlider);
-                weightDiv.appendChild(weightDisplay);
-
-                itemDiv.appendChild(dragHandle);
-                itemDiv.appendChild(textDiv);
-                itemDiv.appendChild(urlDiv);
-                itemDiv.appendChild(weightDiv);
-
-                listContainer.appendChild(itemDiv);
-            });
-        } function editText(textDiv, originalIndex) {
-            // Find the current index in case items were reordered
-            const itemDiv = textDiv.closest('.data-item');
-            const currentIndex = parseInt(itemDiv.dataset.index);
-            const currentText = localData[currentIndex].text || '';
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentText;
-            input.className = 'data-item-text-input';
-
-            let isSaved = false;
-
-            function saveText() {
-                if (isSaved) return;
-                isSaved = true;
-
-                const newText = input.value.trim(); if (newText === '') {
-                    // Delete item if text is empty
-                    if (confirm('Delete this item?')) {
-                        localData.splice(currentIndex, 1);
-                        populateDataItemsList();
-                    } else {
-                        textDiv.textContent = currentText || 'Empty text';
-                    }
-                } else {
-                    localData[currentIndex].text = newText;
-                    textDiv.textContent = newText;
-                }
-                textDiv.style.display = 'block';
-                if (input.parentNode) {
-                    input.remove();
-                }
-            } input.addEventListener('blur', saveText);
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') {
-                    saveText();
-                } else if (e.key === 'Tab') {
-                    e.preventDefault();
-                    saveText();
-                    // Focus on the URL element for editing
-                    setTimeout(() => {
-                        const urlDiv = textDiv.parentNode.querySelector('.data-item-url');
-                        if (urlDiv) {
-                            urlDiv.dispatchEvent(new Event('dblclick'));
-                        }
-                    }, 100);
-                }
-            });
-
-            textDiv.style.display = 'none';
-            textDiv.parentNode.insertBefore(input, textDiv);
-            input.focus();
-            input.select();
-        } function editUrl(urlDiv, originalIndex) {
-            // Find the current index in case items were reordered
-            const itemDiv = urlDiv.closest('.data-item');
-            const currentIndex = parseInt(itemDiv.dataset.index);
-            const currentUrl = localData[currentIndex].url || '';
-
-            const input = document.createElement('input');
-            input.type = 'url';
-            input.value = currentUrl;
-            input.className = 'data-item-url-input';
-
-            let isSaved = false;
-
-            function saveUrl() {
-                if (isSaved) return;
-                isSaved = true;
-
-                const newUrl = input.value.trim(); localData[currentIndex].url = newUrl;
-                urlDiv.textContent = newUrl;
-                urlDiv.style.display = 'block';
-                if (input.parentNode) {
-                    input.remove();
-                }
-            } input.addEventListener('blur', saveUrl);
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') {
-                    saveUrl();
-                } else if (e.key === 'Tab') {
-                    e.preventDefault();
-                    saveUrl();
-                }
-            });
-
-            urlDiv.style.display = 'none';
-            urlDiv.parentNode.insertBefore(input, urlDiv);
-            input.focus();
-            input.select();
-        } function closeSettingsPopup() {
-            isPopupOpen = false;
-            document.getElementById('settingsPopup').style.display = 'none';
-        } function updateLocalDisplay() {
-            // Update current profile's items with local data changes
-            if (profilesData.length > 0 && currentProfileIndex < profilesData.length) {
-                profilesData[currentProfileIndex].items = [...localData];
-            }
-            // Just update the display without saving
-            processProfileData();
-            updateDisplay();
-        }
-
-        function syncFromServer() {
-            // Get URL from input field in case it was changed but not saved yet
-            const urlFromInput = document.getElementById('urlInput').value.trim();
-            const urlToSync = urlFromInput || currentUrl;
-
-            if (!urlToSync) {
-                alert('Please enter a server URL first');
-                return;
-            }
-
-            const syncIcon = document.querySelector('.sync-icon');
-            syncIcon.classList.add('syncing');
-
-            fetch(urlToSync)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Check if data is in new profile format or old format
-                    if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].items) {
-                        // New profile format
-                        profilesData = data;
-                    } else if (Array.isArray(data)) {
-                        // Old format - wrap in a default profile
-                        profilesData = [{
-                            name: "Default",
-                            items: data.map(item => ({
-                                text: item.text || '',
-                                weight: item.weight || 1,
-                                url: item.url || ''
-                            }))
-                        }];
-                    } else {
-                        throw new Error('Data must be an array of profiles or items');
-                    }
-
-                    // Reset to first profile
-                    currentProfileIndex = 0;
-                    localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());                    // Update the display and repopulate the lists
-                    processProfileData();
-                    populateProfilesList();
-                    populateDataItemsList();
-                    updateProfileSelector();
-                    updateDisplay();
-                })
-                .catch(error => {
-                    console.error('Error syncing from server:', error);
-                    alert('Failed to sync data from server: ' + error.message);
-                })
-                .finally(() => {
-                    syncIcon.classList.remove('syncing');
-                });
-        }
-
-        function postDataToUrl() {
-            if (!currentUrl || !currentPassword) {
-                return Promise.resolve();
-            }
-
-            // Extract the key from the URL (last segment)
-            const url = new URL(currentUrl);
-            const pathSegments = url.pathname.split('/').filter(segment => segment);
-            const key = pathSegments[pathSegments.length - 1].replace('.json', '');
-
-            // Build the parent URL
-            const parentPath = pathSegments.slice(0, -1).join('/');
-            const postUrl = url.origin + (parentPath ? '/' + parentPath : '');
-
-            // Update current profile with latest local data
-            if (profilesData.length > 0 && currentProfileIndex < profilesData.length) {
-                profilesData[currentProfileIndex].items = [...localData];
-            }
-
-            const payload = {
-                key: key,
-                value: profilesData, // Send all profiles instead of just current profile data
-                pswd: currentPassword
-            }; return fetch(postUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                // Check if response has content
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    return response.json();
-                } else {
-                    // If response is just "Ok" or plain text, return a simple success object
-                    return response.text().then(text => {
-                        if (text.toLowerCase().includes('ok') || text.trim() === '') {
-                            return { success: true, message: text };
-                        } else {
-                            throw new Error(`Unexpected response: ${text}`);
-                        }
-                    });
-                }
-            });
-        }
-
-        function cancelSettings() {
-            // Close popup without saving any changes
-            closeSettingsPopup();
-        }
-
-        function saveSettings() {
-            const newUrl = document.getElementById('urlInput').value.trim();
-            const newPassword = document.getElementById('passwordInput').value.trim();
-
-            // Update current profile with latest local data
-            updateLocalDisplay();
-
-            // Save password
-            currentPassword = newPassword;
-            localStorage.setItem('bored.password', currentPassword);
-
-            // Update URL if changed
-            if (newUrl !== currentUrl) {
-                currentUrl = newUrl;
-                localStorage.setItem('bored.url', currentUrl);
-            }
-
-            // Save profiles data to localStorage if we have a URL
-            if (currentUrl) {
-                localStorage.setItem('bored.localProfiles', JSON.stringify(profilesData));
-            }
-
-            // Close popup first
-            closeSettingsPopup();
-
-            // Push to server if URL and password are provided
-            if (currentUrl && currentPassword) {
-                postDataToUrl().then(() => {
-                    console.log('Data saved to server successfully');
-                }).catch(error => {
-                    console.error('Error saving to server:', error);
-                    alert('Failed to save data to server: ' + error.message);
-                });
-            }
-        } function addNewItem() {
-            const newItem = {
-                text: 'New item',
-                url: '',
-                weight: 1
-            };
-            localData.push(newItem);
-            populateDataItemsList();
-
-            // Focus on the text input of the newly added item
-            setTimeout(() => {
-                const dataItems = document.querySelectorAll('.data-item-text');
-                if (dataItems.length > 0) {
-                    const lastItem = dataItems[dataItems.length - 1];
-                    lastItem.dispatchEvent(new Event('dblclick'));
-                }
-            }, 100);
-        }        // Unified drag and drop functionality
-        let draggedElement = null;
-        let draggedIndex = null;
-        let draggedType = null; // 'data' or 'profile'
-        let isOverSourceList = false;
-        let isOverDeleteZone = false;
-
-        // Unified drag start handler
-        function handleUnifiedDragStart(e, type) {
-            draggedElement = this;
-            draggedIndex = parseInt(this.dataset.index);
-            draggedType = type;
-            this.classList.add('dragging');
-
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.outerHTML);
-
-            // Add document-level drag tracking
-            document.addEventListener('dragover', handleDocumentDragOver);
-            document.addEventListener('dragenter', handleDocumentDragEnter);
-            document.addEventListener('dragleave', handleDocumentDragLeave);
-
-            // Show delete hint
-            const deleteHint = document.getElementById('deleteHint');
-            deleteHint.classList.add('show');
-
-            isOverSourceList = true; // Start as true since drag starts inside the list
-        }
-
-        // Profile drag start wrapper
-        function handleProfileDragStart(e) {
-            handleUnifiedDragStart.call(this, e, 'profile');
-        }        // Data item drag start wrapper  
-        function handleDragStart(e) {
-            handleUnifiedDragStart.call(this, e, 'data');
-        }
-
-        // Unified drag over handler
-        function handleDragOver(e) {
-            if (e.preventDefault) {
-                e.preventDefault();
-            }
-            e.dataTransfer.dropEffect = 'move';
-            return false;
-        }
-
-        // Unified drag enter handler
-        function handleDragEnter(e) {
-            if (this !== draggedElement) {
-                this.classList.add('drag-over');
-            }
-            isOverSourceList = true;
-        }
-
-        // Unified drag leave handler
-        function handleDragLeave(e) {
-            this.classList.remove('drag-over');
-            // Check if we're really leaving the source list area
-            const sourceList = draggedType === 'profile' ?
-                document.getElementById('profilesList') :
-                document.getElementById('dataItemsList');
-            const rect = sourceList.getBoundingClientRect();
-            const x = e.clientX;
-            const y = e.clientY;
-
-            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-                isOverSourceList = false;
-            }
-        }
-
-        // Create separate handlers for profiles
-        function handleProfileDragOver(e) {
-            return handleDragOver.call(this, e);
-        }
-
-        function handleProfileDragEnter(e) {
-            return handleDragEnter.call(this, e);
-        } function handleProfileDragLeave(e) {
-            return handleDragLeave.call(this, e);
-        }
-
-        // Unified drop handler
-        function handleDrop(e) {
-            if (e.stopPropagation) {
-                e.stopPropagation();
-            }
-
-            if (draggedElement !== this) {
-                const targetIndex = parseInt(this.dataset.index);
-
-                if (draggedType === 'profile') {
-                    // Handle profile reordering
-                    const draggedProfile = profilesData[draggedIndex];
-                    profilesData.splice(draggedIndex, 1);
-
-                    if (draggedIndex < targetIndex) {
-                        profilesData.splice(targetIndex - 1, 0, draggedProfile);
-                        if (currentProfileIndex === draggedIndex) {
-                            currentProfileIndex = targetIndex - 1;
-                        } else if (currentProfileIndex > draggedIndex && currentProfileIndex <= targetIndex) {
-                            currentProfileIndex--;
-                        }
-                    } else {
-                        profilesData.splice(targetIndex, 0, draggedProfile);
-                        if (currentProfileIndex === draggedIndex) {
-                            currentProfileIndex = targetIndex;
-                        } else if (currentProfileIndex >= targetIndex && currentProfileIndex < draggedIndex) {
-                            currentProfileIndex++;
-                        }
-                    }
-
-                    localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
-                    populateProfilesList();
-                } else if (draggedType === 'data') {
-                    // Handle data item reordering
-                    const draggedItem = localData[draggedIndex];
-                    localData.splice(draggedIndex, 1);
-                    localData.splice(targetIndex, 0, draggedItem);
-                    populateDataItemsList();
-                }
-            }
-
-            return false;
-        }        // Create separate drop handlers
-        function handleProfileDrop(e) {
-            return handleDrop.call(this, e);
-        }
-
-        // Unified drag end handler
-        function handleUnifiedDragEnd(e) {
-            this.classList.remove('dragging');
-
-            // Clean up all drag-over classes
-            const allItems = document.querySelectorAll(draggedType === 'profile' ? '.profile-item' : '.data-item');
-            allItems.forEach(item => {
-                item.classList.remove('dragging', 'drag-over');
-            });
-
-            // Remove event listeners
-            document.removeEventListener('dragover', handleDocumentDragOver);
-            document.removeEventListener('dragenter', handleDocumentDragEnter);
-            document.removeEventListener('dragleave', handleDocumentDragLeave);
-
-            // Hide delete hint
-            const deleteHint = document.getElementById('deleteHint');
-            deleteHint.classList.remove('show');
-
-            // Check if dropped on delete zone (only when over delete hint)
-            if (isOverDeleteZone) {
-                if (draggedType === 'profile' && profilesData.length > 1) {
-                    const profileName = profilesData[draggedIndex].name || `Profile ${draggedIndex + 1}`;
-                    if (confirm(`Delete profile "${profileName}"?`)) {
-                        profilesData.splice(draggedIndex, 1);
-
-                        // Adjust current profile index if necessary
-                        if (currentProfileIndex >= profilesData.length) {
-                            currentProfileIndex = profilesData.length - 1;
-                        } else if (currentProfileIndex > draggedIndex) {
-                            currentProfileIndex--;
-                        } else if (currentProfileIndex === draggedIndex) {
-                            currentProfileIndex = 0;
-                        }
-
-                        localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
-                        processProfileData();
-                        populateProfilesList();
-                        populateDataItemsList();
-                    }
-                } else if (draggedType === 'data') {
-                    const itemText = localData[draggedIndex].text || 'this item';
-                    if (confirm(`Delete "${itemText}"?`)) {
-                        localData.splice(draggedIndex, 1);
-                        populateDataItemsList();
-                    }
-                }
-            }
-
-            // Reset drag state
-            draggedElement = null;
-            draggedIndex = null;
-            draggedType = null;
-            isOverSourceList = false;
-            isOverDeleteZone = false;
-        }
-
-        // Create separate drag end handlers
-        function handleProfileDragEnd(e) {
-            return handleUnifiedDragEnd.call(this, e);
-        } function handleDragEnd(e) {
-            return handleUnifiedDragEnd.call(this, e);
-        }
-
-        // Document-level drag tracking to detect delete zone
-        function handleDocumentDragEnter(e) {
-            // Check if over delete hint
-            const deleteHint = document.getElementById('deleteHint');
-            const rect = deleteHint.getBoundingClientRect();
-            const x = e.clientX;
-            const y = e.clientY;
-
-            isOverDeleteZone = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
-        }
-
-        function handleDocumentDragLeave(e) {
-            // Check if leaving delete hint area
-            const deleteHint = document.getElementById('deleteHint');
-            const rect = deleteHint.getBoundingClientRect();
-            const x = e.clientX;
-            const y = e.clientY;
-
-            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-                isOverDeleteZone = false;
-            }
-        }
-
-        // Updated document drag over handler to track delete zone
-        function handleDocumentDragOver(e) {
-            e.preventDefault();
-
-            // Check if we're over the delete hint (red text)
-            const deleteHint = document.getElementById('deleteHint');
-            const rect = deleteHint.getBoundingClientRect();
-            const x = e.clientX;
-            const y = e.clientY;
-
-            const previousDeleteState = isOverDeleteZone;
-            isOverDeleteZone = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
-
-            // Check if we're over the source list
-            const sourceList = draggedType === 'profile' ?
-                document.getElementById('profilesList') :
-                document.getElementById('dataItemsList');
-            const sourceRect = sourceList.getBoundingClientRect();
-
-            const previousSourceState = isOverSourceList;
-            isOverSourceList = (x >= sourceRect.left && x <= sourceRect.right &&
-                y >= sourceRect.top && y <= sourceRect.bottom);
-
-            // Only update delete hint visibility when state changes
-            if (previousDeleteState !== isOverDeleteZone || previousSourceState !== isOverSourceList) {
-                if (isOverDeleteZone) {
-                    deleteHint.style.backgroundColor = 'rgba(220, 38, 38, 1)'; // Brighter red when hovering
-                } else if (isOverSourceList) {
-                    deleteHint.classList.remove('show');
-                } else {
-                    deleteHint.classList.add('show');
-                    deleteHint.style.backgroundColor = 'rgba(220, 38, 38, 0.9)'; // Normal red
-                }
-            }
-        }
-
-        // Profile selector functions
-        function updateProfileSelector() {
-            const selectorContainer = document.getElementById('profileSelector');
-            selectorContainer.innerHTML = '';
-
-            profilesData.forEach((profile, index) => {
-                const profileButton = document.createElement('div');
-                profileButton.className = 'profile-item-header';
-                profileButton.textContent = profile.name || `Profile ${index + 1}`;
-
-                if (index === currentProfileIndex) {
-                    profileButton.classList.add('active');
-                }
-
-                profileButton.addEventListener('click', () => selectProfile(index));
-                selectorContainer.appendChild(profileButton);
-            });
-        }
-
-        // Keyboard event handler
-        function handleKeyDown(e) {
-            // Check for backtick key (keyCode 192 or key "`")
-            if (e.key === '`' || e.keyCode === 192) {
-                e.preventDefault();
-                if (isPopupOpen) {
-                    closeSettingsPopup();
-                } else {
-                    openSettingsPopup();
-                }
-            }
-        }        // Event listeners
-        let hasTouchSupport = 'ontouchstart' in window;
-
-        // Add menu icon touch handling for mobile
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuIcon = document.querySelector('.menu-icon');
-            if (menuIcon && hasTouchSupport) {
-                let touchStartTime = 0;
-                let touchMoved = false;
-
-                menuIcon.addEventListener('touchstart', function (e) {
-                    touchStartTime = Date.now();
-                    touchMoved = false;
-                }, { passive: true });
-
-                menuIcon.addEventListener('touchmove', function (e) {
-                    touchMoved = true;
-                }, { passive: true });
-
-                menuIcon.addEventListener('touchend', function (e) {
-                    const touchDuration = Date.now() - touchStartTime;
-                    if (!touchMoved && touchDuration < 500) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        openSettingsPopup();
-                    }
-                }, { passive: false });
-            }
-        });        // Add touch support for mobile drag and drop
-        if (hasTouchSupport) {
-            document.addEventListener('touchstart', (e) => {
-                // Skip if touching menu icon
-                if (e.target.closest('.menu-icon')) {
-                    return;
-                }
-                if (!isPopupOpen) {
-                    updateDisplay();
-                }
-            }, { passive: false });
-
-            // Mobile drag detection using touch events
-            let touchStartY = 0;
-            let touchStartElement = null;
-            let touchStartProfile = null; document.addEventListener('touchstart', (e) => {
-                // Skip if touching menu icon
-                if (e.target.closest('.menu-icon')) {
-                    return;
-                }
-
-                const dataTarget = e.target.closest('.data-item');
-                const profileTarget = e.target.closest('.profile-item');
-
-                if (dataTarget && dataTarget.draggable) {
-                    touchStartY = e.touches[0].clientY;
-                    touchStartElement = dataTarget;
-                } else if (profileTarget && profileTarget.draggable) {
-                    touchStartY = e.touches[0].clientY;
-                    touchStartProfile = profileTarget;
-                }
-            }, { passive: false });
-            document.addEventListener('touchmove', (e) => {
-                if (touchStartElement) {
-                    e.preventDefault(); // Prevent scrolling while dragging
-                    const currentY = e.touches[0].clientY;
-                    const deltaY = Math.abs(currentY - touchStartY);
-
-                    // Start drag simulation if moved enough
-                    if (deltaY > 10 && !touchStartElement.classList.contains('dragging')) {
-                        // Simulate drag start
-                        draggedElement = touchStartElement;
-                        draggedIndex = parseInt(touchStartElement.dataset.index);
-                        touchStartElement.classList.add('dragging');
-
-                        // Add document drag listener
-                        document.addEventListener('touchmove', handleTouchDragOver, { passive: false });
-                        isOverDataList = true;
-
-                        // Show delete hint
-                        const deleteHint = document.getElementById('deleteHint');
-                        deleteHint.classList.add('show');
-                    }
-                } else if (touchStartProfile) {
-                    e.preventDefault(); // Prevent scrolling while dragging
-                    const currentY = e.touches[0].clientY;
-                    const deltaY = Math.abs(currentY - touchStartY);
-
-                    // Start drag simulation if moved enough
-                    if (deltaY > 10 && !touchStartProfile.classList.contains('dragging')) {
-                        // Simulate profile drag start
-                        draggedProfileElement = touchStartProfile;
-                        draggedProfileIndex = parseInt(touchStartProfile.dataset.index);
-                        touchStartProfile.classList.add('dragging');
-
-                        // Add document drag listener
-                        document.addEventListener('touchmove', handleTouchProfileDragOver, { passive: false });
-                        isOverProfilesList = true;
-
-                        // Show delete hint
-                        const deleteHint = document.getElementById('deleteHint');
-                        deleteHint.classList.add('show');
-                    }
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchend', (e) => {
-                if (touchStartElement && touchStartElement.classList.contains('dragging')) {
-                    // Simulate drag end
-                    touchStartElement.classList.remove('dragging');
-
-                    // Clean up
-                    const allItems = document.querySelectorAll('.data-item');
-                    allItems.forEach(item => item.classList.remove('drag-over'));
-
-                    document.removeEventListener('touchmove', handleTouchDragOver);
-
-                    // Hide delete hint
-                    const deleteHint = document.getElementById('deleteHint');
-                    deleteHint.classList.remove('show');
-
-                    // Check for deletion
-                    if (!isOverDataList && draggedElement && draggedIndex !== null) {
-                        const itemText = localData[draggedIndex].text || 'this item';
-                        if (confirm(`Delete "${itemText}"?`)) {
-                            localData.splice(draggedIndex, 1);
-                            populateDataItemsList();
-                        }
-                    }
-
-                    // Reset
-                    draggedElement = null;
-                    draggedIndex = null;
-                    isOverDataList = false;
-                } else if (touchStartProfile && touchStartProfile.classList.contains('dragging')) {
-                    // Simulate profile drag end
-                    touchStartProfile.classList.remove('dragging');
-
-                    // Clean up
-                    const allProfiles = document.querySelectorAll('.profile-item');
-                    allProfiles.forEach(item => item.classList.remove('drag-over'));
-
-                    document.removeEventListener('touchmove', handleTouchProfileDragOver);
-
-                    // Hide delete hint
-                    const deleteHint = document.getElementById('deleteHint');
-                    deleteHint.classList.remove('show');
-
-                    // Check for deletion
-                    if (!isOverProfilesList && draggedProfileElement && draggedProfileIndex !== null && profilesData.length > 1) {
-                        const profileName = profilesData[draggedProfileIndex].name || `Profile ${draggedProfileIndex + 1}`;
-                        if (confirm(`Delete profile "${profileName}"?`)) {
-                            profilesData.splice(draggedProfileIndex, 1);
-
-                            // Adjust current profile index if necessary
-                            if (currentProfileIndex >= profilesData.length) {
-                                currentProfileIndex = profilesData.length - 1;
-                            } else if (currentProfileIndex > draggedProfileIndex) {
-                                currentProfileIndex--;
-                            } else if (currentProfileIndex === draggedProfileIndex) {
-                                currentProfileIndex = 0;
-                            }
-
-                            localStorage.setItem('bored.currentProfileIndex', currentProfileIndex.toString());
-                            processProfileData();
-                            populateProfilesList();
-                            populateDataItemsList();
-                        }
-                    }
-
-                    // Reset
-                    draggedProfileElement = null;
-                    draggedProfileIndex = null;
-                    isOverProfilesList = false;
-                }
-                touchStartElement = null;
-                touchStartProfile = null;
-                touchStartY = 0;
-            }, { passive: false });
-
-            function handleTouchDragOver(e) {
-                if (!draggedElement) return;
-
-                const touch = e.touches[0];
-                const dataItemsList = document.getElementById('dataItemsList');
-                const rect = dataItemsList.getBoundingClientRect();
-
-                const previousState = isOverDataList;
-                isOverDataList = (touch.clientX >= rect.left && touch.clientX <= rect.right &&
-                    touch.clientY >= rect.top && touch.clientY <= rect.bottom);
-
-                if (previousState !== isOverDataList) {
-                    const deleteHint = document.getElementById('deleteHint');
-                    if (isOverDataList) {
-                        deleteHint.classList.remove('show');
-                    } else {
-                        deleteHint.classList.add('show');
-                    }
-                }
-            }
-
-            function handleTouchProfileDragOver(e) {
-                if (!draggedProfileElement) return;
-
-                const touch = e.touches[0];
-                const profilesList = document.getElementById('profilesList');
-                const rect = profilesList.getBoundingClientRect();
-
-                const previousState = isOverProfilesList;
-                isOverProfilesList = (touch.clientX >= rect.left && touch.clientX <= rect.right &&
-                    touch.clientY >= rect.top && touch.clientY <= rect.bottom);
-
-                if (previousState !== isOverProfilesList) {
-                    const deleteHint = document.getElementById('deleteHint');
-                    if (isOverProfilesList) {
-                        deleteHint.classList.remove('show');
-                    } else {
-                        deleteHint.classList.add('show');
-                    }
-                }
-            }
-        } else {
-            document.addEventListener('click', (e) => {
-                // Skip if clicking menu icon
-                if (e.target.closest('.menu-icon')) {
-                    return;
-                }
-                if (!isPopupOpen) {
-                    updateDisplay();
-                }
-            });
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initializeSettings);
-
-        // Fallback initialization in case DOMContentLoaded already fired
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeSettings);
-        } else {
-            initializeSettings();
-        }
-    </script>
+            async loadData() {
+                const dataUrl = this.currentUrl || 'default.json';
+                const savedData = localStorage.getItem('bored.localProfiles');
+               const savedUrl = localStorage.getItem('bored.url');
+
+               if (savedData && savedUrl === this.currentUrl && this.currentUrl) {
+                   try {
+                       this.profilesData = JSON.parse(savedData);
+                       this.processProfileData();
+                       this.updateProfileSelector();
+                       this.updateDisplay();
+                       return;
+                   } catch (e) {
+                       // Continue to fetch from URL
+                   }
+               }
+
+               const response = await fetch(dataUrl);
+               if (!response.ok) {
+                   throw new Error(`HTTP error! status: ${response.status}`);
+               }
+
+               const data = await response.json();
+               
+               if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].items) {
+                   this.profilesData = data;
+               } else if (Array.isArray(data)) {
+                   this.profilesData = [{
+                       name: "Default",
+                       items: data.map(item => ({
+                           text: item.text || '',
+                           weight: item.weight || 1,
+                           url: item.url || ''
+                       }))
+                   }];
+               } else {
+                   throw new Error('Data must be an array of profiles or items');
+               }
+
+               if (this.currentProfileIndex >= this.profilesData.length) {
+                   this.currentProfileIndex = 0;
+               }
+
+               if (this.currentUrl) {
+                   localStorage.setItem('bored.localProfiles', JSON.stringify(this.profilesData));
+               }
+
+               this.processProfileData();
+               this.updateProfileSelector();
+               this.updateDisplay();
+           }
+
+           processProfileData() {
+               if (this.profilesData.length === 0) {
+                   this.localData = [];
+                   this.weightedOptions = [];
+                   return;
+               }
+
+               const currentProfile = this.profilesData[this.currentProfileIndex] || this.profilesData[0];
+               this.localData = currentProfile.items || [];
+
+               this.weightedOptions = this.localData
+                   .filter(item => item.text && (item.weight || 1) > 0)
+                   .map(item => ({
+                       text: item.text,
+                       weight: item.weight || 1,
+                       url: item.url || null
+                   }));
+           }
+
+           openSettings() {
+               this.isPopupOpen = true;
+               document.getElementById('urlInput').value = this.currentUrl || '';
+               document.getElementById('passwordInput').value = this.currentPassword || '';
+               this.lastSyncedUrl = this.currentUrl || '';
+               
+               this.populateProfilesList();
+               this.populateDataItemsList();
+               document.getElementById('settingsPopup').style.display = 'block';
+           }
+
+           closeSettings() {
+               this.isPopupOpen = false;
+               document.getElementById('settingsPopup').style.display = 'none';
+           }
+
+           populateProfilesList() {
+               const listContainer = document.getElementById('profilesList');
+               listContainer.innerHTML = '';
+
+               this.profilesData.forEach((profile, index) => {
+                   const profileDiv = this.createProfileItem(profile, index);
+                   listContainer.appendChild(profileDiv);
+               });
+           }
+
+           createProfileItem(profile, index) {
+               const profileDiv = document.createElement('div');
+               profileDiv.className = 'profile-item';
+               profileDiv.dataset.index = index;
+               if (index === this.currentProfileIndex) {
+                   profileDiv.classList.add('active');
+               }
+
+               const dragHandle = this.createDragHandle();
+               this.setupDragHandleEvents(profileDiv, dragHandle);
+
+               const nameDiv = document.createElement('div');
+               nameDiv.className = 'profile-name';
+               nameDiv.textContent = profile.name || `Profile ${index + 1}`;
+               nameDiv.addEventListener('dblclick', () => this.editProfileName(nameDiv, index));
+
+               profileDiv.addEventListener('click', (e) => {
+                   if (e.detail === 1) {
+                       setTimeout(() => {
+                           if (!profileDiv.classList.contains('dragging')) {
+                               this.selectProfile(index);
+                           }
+                       }, 200);
+                   }
+               });
+
+               this.dragState.setupDragEvents(profileDiv, 'profile');
+
+               profileDiv.appendChild(dragHandle);
+               profileDiv.appendChild(nameDiv);
+               return profileDiv;
+           }
+
+           populateDataItemsList() {
+               const listContainer = document.getElementById('dataItemsList');
+               listContainer.innerHTML = '';
+
+               this.localData.forEach((item, index) => {
+                   const itemDiv = this.createDataItem(item, index);
+                   listContainer.appendChild(itemDiv);
+               });
+           }
+
+           createDataItem(item, index) {
+               const itemDiv = document.createElement('div');
+               itemDiv.className = 'data-item';
+               itemDiv.dataset.index = index;
+
+               const dragHandle = this.createDragHandle();
+               this.setupDragHandleEvents(itemDiv, dragHandle);
+
+               const textDiv = this.createEditableElement('data-item-text', item.text || 'Empty text', 
+                   () => this.editText(textDiv, index));
+
+               const urlDiv = this.createEditableElement('data-item-url', item.url || ' ', 
+                   () => this.editUrl(urlDiv, index));
+
+               const weightDiv = this.createWeightControl(item, index, itemDiv);
+
+               this.dragState.setupDragEvents(itemDiv, 'data');
+
+               itemDiv.appendChild(dragHandle);
+               itemDiv.appendChild(textDiv);
+               itemDiv.appendChild(urlDiv);
+               itemDiv.appendChild(weightDiv);
+               return itemDiv;
+           }
+
+           createDragHandle() {
+               const dragHandle = document.createElement('div');
+               dragHandle.className = 'drag-handle';
+               dragHandle.innerHTML = `
+                   <svg viewBox="0 0 24 24">
+                       <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"/>
+                   </svg>
+               `;
+               return dragHandle;
+           }
+
+           setupDragHandleEvents(element, dragHandle) {
+               element.draggable = false;
+               dragHandle.addEventListener('mousedown', () => {
+                   element.draggable = true;
+               });
+               element.addEventListener('mouseup', () => {
+                   element.draggable = false;
+               });
+               element.addEventListener('mouseleave', () => {
+                   element.draggable = false;
+               });
+           }
+
+           createEditableElement(className, text, onEdit) {
+               const element = document.createElement('div');
+               element.className = className;
+               element.textContent = text;
+               element.addEventListener('dblclick', onEdit);
+               return element;
+           }
+
+           createWeightControl(item, index, itemDiv) {
+               const weightDiv = document.createElement('div');
+               weightDiv.className = 'weight-control';
+
+               const weightLabel = document.createElement('span');
+               weightLabel.className = 'weight-label';
+               weightLabel.textContent = 'Weight:';
+
+               const weightSlider = document.createElement('input');
+               weightSlider.type = 'range';
+               weightSlider.min = '1';
+               weightSlider.max = '10';
+               weightSlider.value = item.weight || 1;
+               weightSlider.className = 'inline-weight-slider';
+
+               const weightDisplay = document.createElement('span');
+               weightDisplay.className = 'weight-display';
+               weightDisplay.textContent = item.weight || 1;
+
+               weightSlider.addEventListener('input', () => {
+                   const currentIndex = parseInt(itemDiv.dataset.index);
+                   weightDisplay.textContent = weightSlider.value;
+                   this.localData[currentIndex].weight = parseInt(weightSlider.value);
+               });
+
+               weightDiv.appendChild(weightLabel);
+               weightDiv.appendChild(weightSlider);
+               weightDiv.appendChild(weightDisplay);
+               return weightDiv;
+           }
+
+           selectProfile(index) {
+               if (index >= 0 && index < this.profilesData.length) {
+                   this.currentProfileIndex = index;
+                   localStorage.setItem('bored.currentProfileIndex', this.currentProfileIndex.toString());
+                   this.processProfileData();
+                   this.populateProfilesList();
+                   this.populateDataItemsList();
+                   this.updateProfileSelector();
+                   this.updateDisplay();
+               }
+           }
+
+           editProfileName(nameDiv, index) {
+               this.editInPlace(nameDiv, 'profile-name-input', 
+                   this.profilesData[index].name || '', 
+                   (newText) => {
+                       if (newText === '' && this.profilesData.length > 1 && 
+                           confirm('Delete this profile?')) {
+                           this.deleteProfile(index);
+                       } else if (newText !== '') {
+                           this.profilesData[index].name = newText;
+                           nameDiv.textContent = newText;
+                       }
+                   });
+           }
+
+           editText(textDiv, originalIndex) {
+               const itemDiv = textDiv.closest('.data-item');
+               const currentIndex = parseInt(itemDiv.dataset.index);
+               const currentText = this.localData[currentIndex].text || '';
+
+               this.editInPlace(textDiv, 'data-item-text-input', currentText, 
+                   (newText) => {
+                       if (newText === '' && confirm('Delete this item?')) {
+                           this.localData.splice(currentIndex, 1);
+                           this.populateDataItemsList();
+                       } else if (newText !== '') {
+                           this.localData[currentIndex].text = newText;
+                           textDiv.textContent = newText;
+                       }
+                   },
+                   (e) => {
+                       if (e.key === 'Tab') {
+                           e.preventDefault();
+                           setTimeout(() => {
+                               const urlDiv = textDiv.parentNode.querySelector('.data-item-url');
+                               if (urlDiv) urlDiv.dispatchEvent(new Event('dblclick'));
+                           }, 100);
+                       }
+                   });
+           }
+
+           editUrl(urlDiv, originalIndex) {
+               const itemDiv = urlDiv.closest('.data-item');
+               const currentIndex = parseInt(itemDiv.dataset.index);
+               const currentUrl = this.localData[currentIndex].url || '';
+
+               this.editInPlace(urlDiv, 'data-item-url-input', currentUrl, 
+                   (newUrl) => {
+                       this.localData[currentIndex].url = newUrl.trim();
+                       urlDiv.textContent = newUrl.trim();
+                   });
+           }
+
+           editInPlace(element, inputClass, initialValue, onSave, onKeyDown = null) {
+               const input = document.createElement('input');
+               input.type = inputClass.includes('url') ? 'url' : 'text';
+               input.value = initialValue;
+               input.className = inputClass;
+
+               let isSaved = false;
+
+               const save = () => {
+                   if (isSaved) return;
+                   isSaved = true;
+                   onSave(input.value.trim());
+                   element.style.display = 'block';
+                   if (input.parentNode) input.remove();
+               };
+
+               input.addEventListener('blur', save);
+               input.addEventListener('keydown', (e) => {
+                   if (e.key === 'Enter') {
+                       save();
+                   } else if (onKeyDown) {
+                       onKeyDown(e);
+                   }
+               });
+
+               element.style.display = 'none';
+               element.parentNode.insertBefore(input, element);
+               input.focus();
+               input.select();
+           }
+
+           deleteProfile(index) {
+               this.profilesData.splice(index, 1);
+               if (this.currentProfileIndex >= this.profilesData.length) {
+                   this.currentProfileIndex = this.profilesData.length - 1;
+               } else if (this.currentProfileIndex > index) {
+                   this.currentProfileIndex--;
+               }
+               localStorage.setItem('bored.currentProfileIndex', this.currentProfileIndex.toString());
+               this.processProfileData();
+               this.populateProfilesList();
+               this.populateDataItemsList();
+               this.updateProfileSelector();
+           }
+
+           addNewProfile() {
+               const newProfile = {
+                   name: `Profile ${this.profilesData.length + 1}`,
+                   items: []
+               };
+               this.profilesData.push(newProfile);
+               this.populateProfilesList();
+               this.updateProfileSelector();
+
+               setTimeout(() => {
+                   const profileNames = document.querySelectorAll('.profile-name');
+                   if (profileNames.length > 0) {
+                       profileNames[profileNames.length - 1].dispatchEvent(new Event('dblclick'));
+                   }
+               }, 100);
+           }
+
+           addNewItem() {
+               const newItem = { text: 'New item', url: '', weight: 1 };
+               this.localData.push(newItem);
+               this.populateDataItemsList();
+
+               setTimeout(() => {
+                   const dataItems = document.querySelectorAll('.data-item-text');
+                   if (dataItems.length > 0) {
+                       dataItems[dataItems.length - 1].dispatchEvent(new Event('dblclick'));
+                   }
+               }, 100);
+           }
+
+           updateProfileSelector() {
+               const selectorContainer = document.getElementById('profileSelector');
+               selectorContainer.innerHTML = '';
+
+               this.profilesData.forEach((profile, index) => {
+                   const profileButton = document.createElement('div');
+                   profileButton.className = 'profile-item-header';
+                   profileButton.textContent = profile.name || `Profile ${index + 1}`;
+
+                   if (index === this.currentProfileIndex) {
+                       profileButton.classList.add('active');
+                   }
+
+                   profileButton.addEventListener('click', () => this.selectProfile(index));
+                   selectorContainer.appendChild(profileButton);
+               });
+           }
+
+           syncFromServer(showSpinner = true) {
+               const urlFromInput = document.getElementById('urlInput').value.trim();
+               const urlToSync = urlFromInput || this.currentUrl;
+
+               if (!urlToSync) {
+                   alert('Please enter a server URL first');
+                   return;
+               }
+
+               if (showSpinner) {
+                   this.lastSyncedUrl = urlFromInput || this.currentUrl;
+               }
+
+               const syncIcon = document.querySelector('.sync-icon');
+               if (showSpinner && syncIcon) {
+                   syncIcon.classList.add('syncing');
+               }
+
+               fetch(urlToSync)
+                   .then(response => {
+                       if (!response.ok) {
+                           throw new Error(`HTTP error! status: ${response.status}`);
+                       }
+                       return response.json();
+                   })
+                   .then(data => {
+                       if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].items) {
+                           this.profilesData = data;
+                       } else if (Array.isArray(data)) {
+                           this.profilesData = [{
+                               name: "Default",
+                               items: data.map(item => ({
+                                   text: item.text || '',
+                                   weight: item.weight || 1,
+                                   url: item.url || ''
+                               }))
+                           }];
+                       } else {
+                           throw new Error('Data must be an array of profiles or items');
+                       }
+
+                       this.currentProfileIndex = 0;
+                       localStorage.setItem('bored.currentProfileIndex', this.currentProfileIndex.toString());
+                       localStorage.setItem('bored.localProfiles', JSON.stringify(this.profilesData));
+
+                       this.processProfileData();
+                       this.populateProfilesList();
+                       this.populateDataItemsList();
+                       this.updateProfileSelector();
+                       this.updateDisplay();
+                   })
+                   .catch(error => {
+                       alert('Failed to sync data from server: ' + error.message);
+                   })
+                   .finally(() => {
+                       if (showSpinner && syncIcon) {
+                           syncIcon.classList.remove('syncing');
+                       }
+                   });
+           }
+
+           async postDataToUrl() {
+               if (!this.currentUrl || !this.currentPassword) {
+                   return;
+               }
+
+               const url = new URL(this.currentUrl);
+               const pathSegments = url.pathname.split('/').filter(segment => segment);
+               const key = pathSegments[pathSegments.length - 1].replace('.json', '');
+               const parentPath = pathSegments.slice(0, -1).join('/');
+               const postUrl = url.origin + (parentPath ? '/' + parentPath : '');
+
+               if (this.profilesData.length > 0 && this.currentProfileIndex < this.profilesData.length) {
+                   this.profilesData[this.currentProfileIndex].items = [...this.localData];
+               }
+
+               const payload = {
+                   key: key,
+                   value: this.profilesData,
+                   pswd: this.currentPassword
+               };
+
+               const response = await fetch(postUrl, {
+                   method: 'POST',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify(payload)
+               });
+
+               if (!response.ok) {
+                   throw new Error(`HTTP error! status: ${response.status}`);
+               }
+
+               const contentType = response.headers.get('content-type');
+               if (contentType && contentType.includes('application/json')) {
+                   return response.json();
+               } else {
+                   const text = await response.text();
+                   if (text.toLowerCase().includes('ok') || text.trim() === '') {
+                       return { success: true, message: text };
+                   } else {
+                       throw new Error(`Unexpected response: ${text}`);
+                   }
+               }
+           }
+
+           cancelSettings() {
+               this.closeSettings();
+           }
+
+           saveSettings() {
+               const newUrl = document.getElementById('urlInput').value.trim();
+               const newPassword = document.getElementById('passwordInput').value.trim();
+
+               this.updateLocalDisplay();
+               this.currentPassword = newPassword;
+               localStorage.setItem('bored.password', this.currentPassword);
+
+               if (newUrl !== this.lastSyncedUrl && newUrl !== '') {
+                   if (confirm('Server URL has changed since last sync. Do you want to sync data from the new server?')) {
+                       this.currentUrl = newUrl;
+                       localStorage.setItem('bored.url', this.currentUrl);
+                       this.lastSyncedUrl = newUrl;
+                       this.closeSettings();
+                       this.syncFromServer(false);
+                       return;
+                   } else {
+                       return;
+                   }
+               }
+
+               if (newUrl !== this.currentUrl) {
+                   this.currentUrl = newUrl;
+                   if (newUrl) {
+                       localStorage.setItem('bored.url', this.currentUrl);
+                   } else {
+                       localStorage.removeItem('bored.url');
+                   }
+               }
+
+               if (this.currentUrl) {
+                   localStorage.setItem('bored.localProfiles', JSON.stringify(this.profilesData));
+               }
+
+               this.closeSettings();
+
+               if (this.currentUrl && this.currentPassword) {
+                   this.postDataToUrl().catch(error => {
+                       alert('Failed to save data to server: ' + error.message);
+                   });
+               }
+           }
+
+           updateLocalDisplay() {
+               if (this.profilesData.length > 0 && this.currentProfileIndex < this.profilesData.length) {
+                   this.profilesData[this.currentProfileIndex].items = [...this.localData];
+               }
+               this.processProfileData();
+               this.updateDisplay();
+           }
+       }
+
+       class DragState {
+           constructor() {
+               this.draggedElement = null;
+               this.draggedIndex = null;
+               this.draggedType = null;
+               this.isOverSourceList = false;
+               this.isOverDeleteZone = false;
+           }
+
+           setupDragEvents(element, type) {
+               element.addEventListener('dragstart', (e) => this.handleDragStart(e, type));
+               element.addEventListener('dragover', this.handleDragOver);
+               element.addEventListener('drop', (e) => this.handleDrop(e, type));
+               element.addEventListener('dragend', (e) => this.handleDragEnd(e, type));
+               element.addEventListener('dragenter', this.handleDragEnter);
+               element.addEventListener('dragleave', this.handleDragLeave);
+           }
+
+           handleDragStart(e, type) {
+               this.draggedElement = e.target;
+               this.draggedIndex = parseInt(e.target.dataset.index);
+               this.draggedType = type;
+               e.target.classList.add('dragging');
+
+               e.dataTransfer.effectAllowed = 'move';
+               e.dataTransfer.setData('text/html', e.target.outerHTML);
+
+               document.addEventListener('dragover', this.handleDocumentDragOver.bind(this));
+               document.addEventListener('dragenter', this.handleDocumentDragEnter.bind(this));
+               document.addEventListener('dragleave', this.handleDocumentDragLeave.bind(this));
+
+               document.getElementById('deleteHint').classList.add('show');
+               this.isOverSourceList = true;
+           }
+
+           handleDragOver(e) {
+               e.preventDefault();
+               e.dataTransfer.dropEffect = 'move';
+           }
+
+           handleDragEnter(e) {
+               if (e.target !== this.draggedElement) {
+                   e.target.classList.add('drag-over');
+               }
+               this.isOverSourceList = true;
+           }
+
+           handleDragLeave(e) {
+               e.target.classList.remove('drag-over');
+               const sourceList = this.draggedType === 'profile' 
+                   ? document.getElementById('profilesList')
+                   : document.getElementById('dataItemsList');
+               const rect = sourceList.getBoundingClientRect();
+               const { clientX: x, clientY: y } = e;
+
+               if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                   this.isOverSourceList = false;
+               }
+           }
+
+           handleDrop(e, type) {
+               e.stopPropagation();
+
+               if (this.draggedElement !== e.target) {
+                   const targetIndex = parseInt(e.target.dataset.index);
+                   
+                   if (type === 'profile') {
+                       this.reorderProfiles(targetIndex);
+                   } else if (type === 'data') {
+                       this.reorderDataItems(targetIndex);
+                   }
+               }
+           }
+
+           reorderProfiles(targetIndex) {
+               const draggedProfile = app.profilesData[this.draggedIndex];
+               app.profilesData.splice(this.draggedIndex, 1);
+
+               if (this.draggedIndex < targetIndex) {
+                   app.profilesData.splice(targetIndex - 1, 0, draggedProfile);
+                   if (app.currentProfileIndex === this.draggedIndex) {
+                       app.currentProfileIndex = targetIndex - 1;
+                   } else if (app.currentProfileIndex > this.draggedIndex && app.currentProfileIndex <= targetIndex) {
+                       app.currentProfileIndex--;
+                   }
+               } else {
+                   app.profilesData.splice(targetIndex, 0, draggedProfile);
+                   if (app.currentProfileIndex === this.draggedIndex) {
+                       app.currentProfileIndex = targetIndex;
+                   } else if (app.currentProfileIndex >= targetIndex && app.currentProfileIndex < this.draggedIndex) {
+                       app.currentProfileIndex++;
+                   }
+               }
+
+               localStorage.setItem('bored.currentProfileIndex', app.currentProfileIndex.toString());
+               app.populateProfilesList();
+           }
+
+           reorderDataItems(targetIndex) {
+               const draggedItem = app.localData[this.draggedIndex];
+               app.localData.splice(this.draggedIndex, 1);
+               app.localData.splice(targetIndex, 0, draggedItem);
+               app.populateDataItemsList();
+           }
+
+           handleDragEnd(e, type) {
+               e.target.classList.remove('dragging');
+
+               const allItems = document.querySelectorAll(type === 'profile' ? '.profile-item' : '.data-item');
+               allItems.forEach(item => item.classList.remove('dragging', 'drag-over'));
+
+               document.removeEventListener('dragover', this.handleDocumentDragOver);
+               document.removeEventListener('dragenter', this.handleDocumentDragEnter);
+               document.removeEventListener('dragleave', this.handleDocumentDragLeave);
+
+               document.getElementById('deleteHint').classList.remove('show');
+
+               if (this.isOverDeleteZone) {
+                   this.handleDelete(type);
+               }
+
+               this.reset();
+           }
+
+           handleDelete(type) {
+               if (type === 'profile' && app.profilesData.length > 1) {
+                   const profileName = app.profilesData[this.draggedIndex].name || `Profile ${this.draggedIndex + 1}`;
+                   if (confirm(`Delete profile "${profileName}"?`)) {
+                       app.deleteProfile(this.draggedIndex);
+                   }
+               } else if (type === 'data') {
+                   const itemText = app.localData[this.draggedIndex].text || 'this item';
+                   if (confirm(`Delete "${itemText}"?`)) {
+                       app.localData.splice(this.draggedIndex, 1);
+                       app.populateDataItemsList();
+                   }
+               }
+           }
+
+           handleDocumentDragOver(e) {
+               e.preventDefault();
+               const deleteHint = document.getElementById('deleteHint');
+               const rect = deleteHint.getBoundingClientRect();
+               const { clientX: x, clientY: y } = e;
+
+               const wasOverDeleteZone = this.isOverDeleteZone;
+               this.isOverDeleteZone = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+
+               const sourceList = this.draggedType === 'profile' 
+                   ? document.getElementById('profilesList')
+                   : document.getElementById('dataItemsList');
+               const sourceRect = sourceList.getBoundingClientRect();
+
+               const wasOverSourceList = this.isOverSourceList;
+               this.isOverSourceList = (x >= sourceRect.left && x <= sourceRect.right &&
+                   y >= sourceRect.top && y <= sourceRect.bottom);
+
+               if (wasOverDeleteZone !== this.isOverDeleteZone || wasOverSourceList !== this.isOverSourceList) {
+                   if (this.isOverDeleteZone) {
+                       deleteHint.style.backgroundColor = 'rgba(220, 38, 38, 1)';
+                   } else if (this.isOverSourceList) {
+                       deleteHint.classList.remove('show');
+                   } else {
+                       deleteHint.classList.add('show');
+                       deleteHint.style.backgroundColor = 'rgba(220, 38, 38, 0.9)';
+                   }
+               }
+           }
+
+           handleDocumentDragEnter(e) {
+               const deleteHint = document.getElementById('deleteHint');
+               const rect = deleteHint.getBoundingClientRect();
+               const { clientX: x, clientY: y } = e;
+               this.isOverDeleteZone = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+           }
+
+           handleDocumentDragLeave(e) {
+               const deleteHint = document.getElementById('deleteHint');
+               const rect = deleteHint.getBoundingClientRect();
+               const { clientX: x, clientY: y } = e;
+               if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                   this.isOverDeleteZone = false;
+               }
+           }
+
+           reset() {
+               this.draggedElement = null;
+               this.draggedIndex = null;
+               this.draggedType = null;
+               this.isOverSourceList = false;
+               this.isOverDeleteZone = false;
+           }
+       }
+
+       let app;
+
+       document.addEventListener('DOMContentLoaded', () => {
+           app = new BoredApp();
+       });
+
+       if (document.readyState !== 'loading') {
+           app = new BoredApp();
+       }
+   </script>
 </body>
 
 </html>
