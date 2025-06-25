@@ -42,6 +42,17 @@
             -ms-user-select: none;
         }
 
+        /* Custom text selection color - orange */
+        ::selection {
+            background-color: #ff8c00;
+            color: #ffffff;
+        }
+
+        ::-moz-selection {
+            background-color: #ff8c00;
+            color: #ffffff;
+        }
+
         #display {
             font-size: 2.5rem;
             font-weight: bold;
@@ -159,6 +170,10 @@
             color: var(--text-primary);
             text-align: center;
             transition: all 0.3s ease;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .setting-input:focus {
@@ -357,6 +372,10 @@
             font-size: inherit;
             outline: none;
             box-sizing: border-box;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .section-title {
@@ -472,6 +491,10 @@
             font-size: inherit;
             outline: none;
             box-sizing: border-box;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .data-item-url {
@@ -498,6 +521,10 @@
             font-size: 0.9rem;
             outline: none;
             box-sizing: border-box;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .weight-control {
@@ -627,9 +654,7 @@
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        /* Mobile compatibility styles */
+        }        /* Mobile compatibility styles */
         @media (max-width: 768px) {
             body {
                 padding: 0 0.5rem;
@@ -639,8 +664,8 @@
             #display {
                 font-size: 1.8rem;
                 padding: 1.5rem;
-                margin: 1.5rem;
-                width: calc(100vw - 3rem);
+                margin: 2rem;
+                width: calc(100vw - 4rem);
                 min-height: 150px;
             }
 
@@ -655,17 +680,33 @@
             }
 
             .popup-window {
-                width: calc(100% - 2rem);
+                width: calc(100vw - 2rem);
                 padding: 1.5rem;
                 margin: 1rem;
                 left: 1rem;
                 right: 1rem;
                 transform: translateY(-50%);
+                max-height: calc(100vh - 2rem);
+                overflow: hidden;
+                box-sizing: border-box;
             }
 
             .popup-window.expanded {
                 max-width: none;
-                width: calc(100% - 2rem);
+                width: calc(100vw - 2rem);
+                max-height: calc(100vh - 2rem);
+            }
+
+            .settings-content {
+                max-height: calc(100vh - 8rem);
+                overflow-y: auto;
+                padding-right: 0.5rem;
+                margin-right: -0.5rem;
+            }
+
+            /* Fix scrollbar for mobile */
+            .settings-content::-webkit-scrollbar {
+                width: 8px;
             }
 
             .popup-title {
@@ -717,13 +758,14 @@
             .weight-label {
                 font-size: 0.8rem;
                 min-width: 50px;
-            }
-
-            .menu-icon {
+            }            .menu-icon {
                 width: 40px;
                 height: 40px;
                 top: 15px;
                 left: 15px;
+                z-index: 1001;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
             }
 
             .menu-icon svg {
@@ -762,9 +804,7 @@
                 font-size: 0.7rem;
                 padding: 0.4rem 0.8rem;
             }
-        }
-
-        @media (max-width: 480px) {
+        }        @media (max-width: 480px) {
             body {
                 padding: 0 0.5rem;
                 box-sizing: border-box;
@@ -783,42 +823,53 @@
 
             .popup-window {
                 padding: 1rem;
-                width: calc(100% - 2rem);
-                margin: 1rem;
-                left: 1rem;
-                right: 1rem;
+                width: calc(100vw - 1rem);
+                margin: 0.5rem;
+                left: 0.5rem;
+                right: 0.5rem;
                 transform: translateY(-50%);
+                max-height: calc(100vh - 1rem);
+            }
+
+            .settings-content {
+                max-height: calc(100vh - 6rem);
+                padding-right: 0.25rem;
+                margin-right: -0.25rem;
             }
 
             .popup-title {
                 font-size: 1.3rem;
             }
-        }
-
-        @media (max-width: 320px) {
+        }        @media (max-width: 320px) {
             body {
-                padding: 0 0.75rem;
+                padding: 0 0.25rem;
             }
 
             #display {
-                margin: 1rem;
-                width: calc(100vw - 2rem);
+                margin: 1.25rem;
+                width: calc(100vw - 2.5rem);
                 padding: 0.8rem;
             }
 
             .popup-window {
-                width: calc(100% - 1.5rem);
-                margin: 0.75rem;
-                left: 0.75rem;
-                right: 0.75rem;
+                width: calc(100vw - 0.5rem);
+                margin: 0.25rem;
+                left: 0.25rem;
+                right: 0.25rem;
                 padding: 0.8rem;
+                max-height: calc(100vh - 0.5rem);
+            }
+
+            .settings-content {
+                max-height: calc(100vh - 5rem);
+                padding-right: 0;
+                margin-right: 0;
             }
         }
     </style>
 </head>
 
-<body>
-    <!-- Menu Icon -->
+<body>    <!-- Menu Icon -->
     <div class="menu-icon" onclick="openSettingsPopup()">
         <svg viewBox="0 0 24 24">
             <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
@@ -1086,7 +1137,33 @@
             populateProfilesList();
             populateDataItemsList();
             document.getElementById('settingsPopup').style.display = 'block';
-        } function populateProfilesList() {
+            // Add event listener for URL input blur to auto-sync
+            const urlInput = document.getElementById('urlInput');
+            if (urlInput && !urlInput.hasAttribute('data-listener-added')) {
+                urlInput.setAttribute('data-listener-added', 'true');
+                urlInput.addEventListener('blur', handleUrlInputBlur);
+            }
+        }
+
+        // Handle URL input blur to sync from new URL
+        function handleUrlInputBlur(e) {
+            const newUrl = e.target.value.trim();
+
+            // Only sync if URL is not empty and different from current URL
+            if (newUrl && newUrl !== currentUrl) {
+                // Temporarily update currentUrl for sync
+                const originalUrl = currentUrl;
+                currentUrl = newUrl;
+
+                // Sync from new URL
+                syncFromServer();
+
+                // Restore original URL (it will be properly updated when settings are closed)
+                currentUrl = originalUrl;
+            }
+        }
+
+        function populateProfilesList() {
             const listContainer = document.getElementById('profilesList');
             listContainer.innerHTML = '';
 
@@ -1106,15 +1183,22 @@
                     <svg viewBox="0 0 24 24">
                         <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"/>
                     </svg>
-                `;
-
-                // Drag event listeners
+                `;                // Drag event listeners
                 profileDiv.addEventListener('dragstart', handleProfileDragStart);
                 profileDiv.addEventListener('dragover', handleProfileDragOver);
                 profileDiv.addEventListener('drop', handleProfileDrop);
                 profileDiv.addEventListener('dragend', handleProfileDragEnd);
                 profileDiv.addEventListener('dragenter', handleProfileDragEnter);
                 profileDiv.addEventListener('dragleave', handleProfileDragLeave);
+
+                // Disable dragging when interacting with input fields
+                profileDiv.addEventListener('mousedown', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.closest('input')) {
+                        profileDiv.draggable = false;
+                    } else {
+                        profileDiv.draggable = true;
+                    }
+                });
 
                 const nameDiv = document.createElement('div');
                 nameDiv.className = 'profile-name';
@@ -1190,13 +1274,19 @@
                 if (input.parentNode) {
                     input.remove();
                 }
-            }
-
-            input.addEventListener('blur', saveName);
+            } input.addEventListener('blur', saveName);
             input.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     saveName();
                 }
+            });
+
+            // Disable dragging while input is active
+            input.addEventListener('focus', () => {
+                nameDiv.closest('.profile-item').draggable = false;
+            });
+            input.addEventListener('blur', () => {
+                nameDiv.closest('.profile-item').draggable = true;
             });
 
             nameDiv.style.display = 'none';
@@ -1239,15 +1329,22 @@
                     <svg viewBox="0 0 24 24">
                         <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z"/>
                     </svg>
-                `;
-
-                // Drag event listeners
+                `;                // Drag event listeners
                 itemDiv.addEventListener('dragstart', handleDragStart);
                 itemDiv.addEventListener('dragover', handleDragOver);
                 itemDiv.addEventListener('drop', handleDrop);
                 itemDiv.addEventListener('dragend', handleDragEnd);
                 itemDiv.addEventListener('dragenter', handleDragEnter);
                 itemDiv.addEventListener('dragleave', handleDragLeave);
+
+                // Disable dragging when interacting with input fields
+                itemDiv.addEventListener('mousedown', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.closest('input')) {
+                        itemDiv.draggable = false;
+                    } else {
+                        itemDiv.draggable = true;
+                    }
+                });
 
                 // Text element (editable on double click)
                 const textDiv = document.createElement('div');
@@ -1343,6 +1440,14 @@
                 }
             });
 
+            // Disable dragging while input is active
+            input.addEventListener('focus', () => {
+                textDiv.closest('.data-item').draggable = false;
+            });
+            input.addEventListener('blur', () => {
+                textDiv.closest('.data-item').draggable = true;
+            });
+
             textDiv.style.display = 'none';
             textDiv.parentNode.insertBefore(input, textDiv);
             input.focus();
@@ -1378,6 +1483,14 @@
                     e.preventDefault();
                     saveUrl();
                 }
+            });
+
+            // Disable dragging while input is active
+            input.addEventListener('focus', () => {
+                urlDiv.closest('.data-item').draggable = false;
+            });
+            input.addEventListener('blur', () => {
+                urlDiv.closest('.data-item').draggable = true;
             });
 
             urlDiv.style.display = 'none';
@@ -1838,9 +1951,40 @@
                 }
             }
         }        // Event listeners
-        let hasTouchSupport = 'ontouchstart' in window;        // Add touch support for mobile drag and drop
+        let hasTouchSupport = 'ontouchstart' in window;
+
+        // Add menu icon touch handling for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuIcon = document.querySelector('.menu-icon');
+            if (menuIcon && hasTouchSupport) {
+                let touchStartTime = 0;
+                let touchMoved = false;
+                
+                menuIcon.addEventListener('touchstart', function(e) {
+                    touchStartTime = Date.now();
+                    touchMoved = false;
+                }, { passive: true });
+                
+                menuIcon.addEventListener('touchmove', function(e) {
+                    touchMoved = true;
+                }, { passive: true });
+                
+                menuIcon.addEventListener('touchend', function(e) {
+                    const touchDuration = Date.now() - touchStartTime;
+                    if (!touchMoved && touchDuration < 500) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openSettingsPopup();
+                    }
+                }, { passive: false });
+            }
+        });        // Add touch support for mobile drag and drop
         if (hasTouchSupport) {
             document.addEventListener('touchstart', (e) => {
+                // Skip if touching menu icon
+                if (e.target.closest('.menu-icon')) {
+                    return;
+                }
                 if (!isPopupOpen) {
                     updateDisplay();
                 }
@@ -1850,6 +1994,11 @@
             let touchStartY = 0;
             let touchStartElement = null;
             let touchStartProfile = null;            document.addEventListener('touchstart', (e) => {
+                // Skip if touching menu icon
+                if (e.target.closest('.menu-icon')) {
+                    return;
+                }
+                
                 const dataTarget = e.target.closest('.data-item');
                 const profileTarget = e.target.closest('.profile-item');
 
@@ -1860,7 +2009,8 @@
                     touchStartY = e.touches[0].clientY;
                     touchStartProfile = profileTarget;
                 }
-            }, { passive: false });            document.addEventListener('touchmove', (e) => {
+            }, { passive: false });
+            document.addEventListener('touchmove', (e) => {
                 if (touchStartElement) {
                     e.preventDefault(); // Prevent scrolling while dragging
                     const currentY = e.touches[0].clientY;
@@ -1971,7 +2121,9 @@
                     // Reset
                     draggedProfileElement = null;
                     draggedProfileIndex = null;
-                    isOverProfilesList = false;                } touchStartElement = null;
+                    isOverProfilesList = false;
+                }
+                touchStartElement = null;
                 touchStartProfile = null;
                 touchStartY = 0;
             }, { passive: false });
@@ -2016,9 +2168,12 @@
                         deleteHint.classList.add('show');
                     }
                 }
-            }
-        } else {
+            }        } else {
             document.addEventListener('click', (e) => {
+                // Skip if clicking menu icon
+                if (e.target.closest('.menu-icon')) {
+                    return;
+                }
                 if (!isPopupOpen) {
                     updateDisplay();
                 }
